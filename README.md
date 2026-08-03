@@ -19,3 +19,5 @@ The remove button wipes it.
 This utility will allow you to see when the ID changes by some unknown use of MS live services or by access of a same by a tool you are inadvertently running within windows. 
 
 To block this tracking you will need to run a tool such as Windows Firewall Notifier to block any unwanted login.live.com access.
+
+For more information on the GDID tracking key visit this link : https://www.it-connect.tech/windows-gdid-impossible-to-delete-but-you-can-block-it/
