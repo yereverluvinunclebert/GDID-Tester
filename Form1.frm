@@ -9,7 +9,7 @@ Begin VB.Form Form1
    LockControls    =   -1  'True
    ScaleHeight     =   2955
    ScaleWidth      =   7245
-   StartUpPosition =   3  'Windows Default
+   StartUpPosition =   2  'CenterScreen
    Begin VB.TextBox txtDateTime 
       Height          =   345
       Left            =   5160
@@ -179,7 +179,7 @@ Private Sub btnRemoveRegValue_Click()
     
     Call readRegistryValue
     
-    If GDID = "" Then
+    If txtRegistryValue.Text = "" Then
         MsgBox "No GDID found in the registry"
     Else
         Call writeRegistry(HKEY_CURRENT_USER, "SOFTWARE\Microsoft\IdentityCRL\ExtendedProperties", "lid", "")
@@ -339,8 +339,8 @@ Private Sub testGDID()
     Call readRegistryValue
     
     If oldRegValue <> GDID Then
-        MsgBox "GDID has changed"
         txtDateTime.Text = Now()
+        MsgBox "GDID has changed"
     End If
 
     On Error GoTo 0
