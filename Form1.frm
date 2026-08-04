@@ -6,13 +6,22 @@ Begin VB.Form Form1
    ClientTop       =   405
    ClientWidth     =   7245
    LinkTopic       =   "Form1"
+   LockControls    =   -1  'True
    ScaleHeight     =   2955
    ScaleWidth      =   7245
    StartUpPosition =   3  'Windows Default
+   Begin VB.TextBox txtDateTime 
+      Height          =   345
+      Left            =   5160
+      TabIndex        =   10
+      Text            =   "None Found"
+      Top             =   240
+      Width           =   1845
+   End
    Begin VB.CommandButton btnReadRegistry 
       Caption         =   "Read GDID"
       Height          =   405
-      Left            =   5370
+      Left            =   5490
       TabIndex        =   5
       Top             =   1230
       Width           =   1515
@@ -20,7 +29,7 @@ Begin VB.Form Form1
    Begin VB.CommandButton btnDismiss 
       Caption         =   "Dismiss"
       Height          =   435
-      Left            =   5370
+      Left            =   5490
       TabIndex        =   2
       Top             =   2220
       Width           =   1515
@@ -33,18 +42,26 @@ Begin VB.Form Form1
    Begin VB.CommandButton btnRemoveRegValue 
       Caption         =   "Remove"
       Height          =   405
-      Left            =   5370
+      Left            =   5490
       TabIndex        =   1
       Top             =   1740
       Width           =   1515
    End
    Begin VB.TextBox txtRegistryValue 
-      Height          =   405
-      Left            =   600
+      Height          =   345
+      Left            =   1140
       TabIndex        =   0
-      Text            =   "txtRegistryValue"
-      Top             =   210
-      Width           =   6255
+      Text            =   "Registry Value"
+      Top             =   240
+      Width           =   2805
+   End
+   Begin VB.Label Label2 
+      Caption         =   "Date/Time"
+      Height          =   435
+      Left            =   4200
+      TabIndex        =   11
+      Top             =   300
+      Width           =   1095
    End
    Begin VB.Label lblGDILink 
       Caption         =   "GDID Information"
@@ -60,15 +77,15 @@ Begin VB.Form Form1
    Begin VB.Label lblCountdown 
       Caption         =   "10 - Testing"
       Height          =   255
-      Left            =   330
+      Left            =   300
       TabIndex        =   8
       Top             =   2370
       Width           =   1935
    End
    Begin VB.Label Label1 
-      Caption         =   "If you use Ege or visit any MS site that accesses login.live.com, then this value may be re-populated with a GDID."
+      Caption         =   "If you use Edge or visit any MS site that accesses login.live.com, then this value may be re-populated with a GDID."
       Height          =   645
-      Left            =   330
+      Left            =   300
       TabIndex        =   7
       ToolTipText     =   "Microsoft account, Store, OneDrive, Microsoft 365, account-linked UWP apps"
       Top             =   1590
@@ -77,18 +94,18 @@ Begin VB.Form Form1
    Begin VB.Label lblCheckValue 
       Caption         =   "Checking the above value every ten seconds"
       Height          =   645
-      Left            =   330
+      Left            =   300
       TabIndex        =   6
       Top             =   1230
       Width           =   3915
    End
    Begin VB.Label lblKey 
-      Caption         =   "Key"
+      Caption         =   "Key Value"
       Height          =   435
-      Left            =   150
+      Left            =   300
       TabIndex        =   4
       Top             =   300
-      Width           =   465
+      Width           =   1035
    End
    Begin VB.Label txtGDID 
       Caption         =   "HKEY_CURRENT_USER, ""SOFTWARE\Microsoft\IdentityCRL\ExtendedProperties"", ""lid"""
@@ -321,7 +338,10 @@ Private Sub testGDID()
     
     Call readRegistryValue
     
-    If oldRegValue <> GDID Then MsgBox "GDID has changed"
+    If oldRegValue <> GDID Then
+        MsgBox "GDID has changed"
+        txtDateTime.Text = Now()
+    End If
 
     On Error GoTo 0
     Exit Sub
