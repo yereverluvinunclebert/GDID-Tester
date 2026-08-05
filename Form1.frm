@@ -1,15 +1,22 @@
 VERSION 5.00
 Begin VB.Form Form1 
    Caption         =   "GDID Tester"
-   ClientHeight    =   2955
+   ClientHeight    =   3255
    ClientLeft      =   60
    ClientTop       =   405
    ClientWidth     =   7245
    LinkTopic       =   "Form1"
-   LockControls    =   -1  'True
-   ScaleHeight     =   2955
+   ScaleHeight     =   3255
    ScaleWidth      =   7245
    StartUpPosition =   2  'CenterScreen
+   Begin VB.CheckBox chkAlertMsgBox 
+      Caption         =   "Enable Automatic Alert pop-up when found"
+      Height          =   405
+      Left            =   330
+      TabIndex        =   12
+      Top             =   2700
+      Width           =   3675
+   End
    Begin VB.TextBox txtDateTime 
       Height          =   345
       Left            =   5160
@@ -23,7 +30,7 @@ Begin VB.Form Form1
       Height          =   405
       Left            =   5490
       TabIndex        =   5
-      Top             =   1230
+      Top             =   1620
       Width           =   1515
    End
    Begin VB.CommandButton btnDismiss 
@@ -31,20 +38,20 @@ Begin VB.Form Form1
       Height          =   435
       Left            =   5490
       TabIndex        =   2
-      Top             =   2220
+      Top             =   2580
       Width           =   1515
    End
    Begin VB.Timer Timer 
       Interval        =   1000
-      Left            =   4350
-      Top             =   2190
+      Left            =   4410
+      Top             =   1350
    End
    Begin VB.CommandButton btnRemoveRegValue 
       Caption         =   "Remove"
       Height          =   405
       Left            =   5490
       TabIndex        =   1
-      Top             =   1740
+      Top             =   2100
       Width           =   1515
    End
    Begin VB.TextBox txtRegistryValue 
@@ -55,6 +62,14 @@ Begin VB.Form Form1
       Top             =   240
       Width           =   2805
    End
+   Begin VB.Label Label3 
+      Caption         =   "Seconds until next test -"
+      Height          =   435
+      Left            =   300
+      TabIndex        =   13
+      Top             =   2370
+      Width           =   1785
+   End
    Begin VB.Label Label2 
       Caption         =   "Date/Time"
       Height          =   435
@@ -63,21 +78,21 @@ Begin VB.Form Form1
       Top             =   300
       Width           =   1095
    End
-   Begin VB.Label lblGDILink 
+   Begin VB.Label lblGDIDLink 
       Caption         =   "GDID Information"
-      ForeColor       =   &H8000000D&
+      ForeColor       =   &H00FF8080&
       Height          =   495
-      Left            =   3390
+      Left            =   3990
       MousePointer    =   1  'Arrow
       TabIndex        =   9
       ToolTipText     =   "Double click here to view a site describing the GDID tracking issue."
-      Top             =   2400
+      Top             =   2790
       Width           =   1545
    End
    Begin VB.Label lblCountdown 
       Caption         =   "10 - Testing"
       Height          =   255
-      Left            =   300
+      Left            =   2130
       TabIndex        =   8
       Top             =   2370
       Width           =   1935
@@ -157,8 +172,10 @@ Private Sub btnReadRegistry_Click()
 
     On Error GoTo btnReadRegistry_Click_Error
 
-    If GDID = "" Then MsgBox "No GDID found in the registry"
-
+    Call testGDID
+    If GDID = "" Then
+        MsgBox "No GDID found in the registry"
+    End If
     On Error GoTo 0
     Exit Sub
 
@@ -270,24 +287,44 @@ End Sub
 
 
 '---------------------------------------------------------------------------------------
-' Procedure : lblGDILink_DblClick
+' Procedure : lblGDIDLink_DblClick
 ' Author    : beededea
 ' Date      : 03/08/2026
 ' Purpose   :
 '---------------------------------------------------------------------------------------
 '
-Private Sub lblGDILink_DblClick()
+Private Sub lblGDIDLink_DblClick()
 
-    On Error GoTo lblGDILink_DblClick_Error
+    On Error GoTo lblGDIDLink_DblClick_Error
 
         Call ShellExecute(Form1.hwnd, "Open", "https://www.it-connect.tech/windows-gdid-impossible-to-delete-but-you-can-block-i", vbNullString, vbNullString, 1)
 
     On Error GoTo 0
     Exit Sub
 
-lblGDILink_DblClick_Error:
+lblGDIDLink_DblClick_Error:
 
-     MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure lblGDILink_DblClick of Form Form1"
+     MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure lblGDIDLink_DblClick of Form Form1"
+End Sub
+
+'---------------------------------------------------------------------------------------
+' Procedure : lblGDIDLink_MouseMove
+' Author    : beededea
+' Date      : 05/08/2026
+' Purpose   :
+'---------------------------------------------------------------------------------------
+'
+Private Sub lblGDIDLink_MouseMove(Button As Integer, Shift As Integer, X As Single, Y As Single)
+    On Error GoTo lblGDIDLink_MouseMove_Error
+
+    lblGDIDLink.ForeColor = &HC00000
+
+    On Error GoTo 0
+    Exit Sub
+
+lblGDIDLink_MouseMove_Error:
+
+     MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure lblGDIDLink_MouseMove of Form Form1"
 End Sub
 
 '---------------------------------------------------------------------------------------
@@ -342,7 +379,7 @@ Private Sub testGDID()
     
     If oldRegValue <> GDID Then
         txtDateTime.Text = Now()
-        MsgBox "GDID has changed"
+        If chkAlertMsgBox.Value = 1 Then MsgBox "GDID has changed"
     End If
 
     On Error GoTo 0
