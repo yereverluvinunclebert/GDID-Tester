@@ -1,34 +1,34 @@
 VERSION 5.00
 Begin VB.Form Form1 
    Caption         =   "GDID Tester"
-   ClientHeight    =   3705
+   ClientHeight    =   3435
    ClientLeft      =   60
    ClientTop       =   405
    ClientWidth     =   7245
    LinkTopic       =   "Form1"
-   ScaleHeight     =   3705
+   ScaleHeight     =   3435
    ScaleWidth      =   7245
    StartUpPosition =   2  'CenterScreen
    Begin VB.CheckBox chkRegularTesting 
       Caption         =   "Enable Regular Testing"
       Height          =   405
       Left            =   330
-      TabIndex        =   14
-      Top             =   3120
+      TabIndex        =   13
+      Top             =   2820
       Width           =   2535
    End
    Begin VB.CheckBox chkAlertMsgBox 
       Caption         =   "Enable Automatic Alert pop-up when found"
       Height          =   405
       Left            =   330
-      TabIndex        =   12
-      Top             =   2700
+      TabIndex        =   11
+      Top             =   2400
       Width           =   3675
    End
    Begin VB.TextBox txtDateTime 
       Height          =   345
       Left            =   5160
-      TabIndex        =   10
+      TabIndex        =   9
       Text            =   "None Found"
       Top             =   240
       Width           =   1845
@@ -38,7 +38,7 @@ Begin VB.Form Form1
       Height          =   405
       Left            =   5490
       TabIndex        =   5
-      Top             =   2070
+      Top             =   1770
       Width           =   1515
    End
    Begin VB.CommandButton btnDismiss 
@@ -46,21 +46,21 @@ Begin VB.Form Form1
       Height          =   435
       Left            =   5490
       TabIndex        =   2
-      Top             =   3030
+      Top             =   2730
       Width           =   1515
    End
    Begin VB.Timer tmrGDIDTester 
       Enabled         =   0   'False
       Interval        =   1000
-      Left            =   4440
-      Top             =   1350
+      Left            =   4290
+      Top             =   1830
    End
    Begin VB.CommandButton btnRemoveRegValue 
       Caption         =   "Remove"
       Height          =   405
       Left            =   5490
       TabIndex        =   1
-      Top             =   2550
+      Top             =   2250
       Width           =   1515
    End
    Begin VB.TextBox txtRegistryValue 
@@ -75,15 +75,15 @@ Begin VB.Form Form1
       Caption         =   "Seconds until next test -"
       Height          =   435
       Left            =   300
-      TabIndex        =   13
-      Top             =   2370
+      TabIndex        =   12
+      Top             =   2070
       Width           =   1785
    End
    Begin VB.Label Label2 
       Caption         =   "Date/Time"
       Height          =   435
       Left            =   4200
-      TabIndex        =   11
+      TabIndex        =   10
       Top             =   300
       Width           =   1095
    End
@@ -93,35 +93,26 @@ Begin VB.Form Form1
       Height          =   495
       Left            =   3990
       MousePointer    =   1  'Arrow
-      TabIndex        =   9
+      TabIndex        =   8
       ToolTipText     =   "Double click here to view a site describing the GDID tracking issue."
-      Top             =   3210
+      Top             =   2910
       Width           =   1545
    End
    Begin VB.Label lblCountdown 
       Caption         =   "Disabled"
       Height          =   255
       Left            =   2130
-      TabIndex        =   8
-      Top             =   2370
+      TabIndex        =   7
+      Top             =   2070
       Width           =   1935
    End
-   Begin VB.Label Label1 
-      Caption         =   "If you use Edge or visit any MS site that accesses login.live.com, then this value may be re-populated with a GDID."
-      Height          =   645
-      Left            =   300
-      TabIndex        =   7
-      ToolTipText     =   "Microsoft account, Store, OneDrive, Microsoft 365, account-linked UWP apps"
-      Top             =   1590
-      Width           =   4365
-   End
    Begin VB.Label lblCheckValue 
-      Caption         =   "Checking the above value every ten seconds"
+      Caption         =   $"Form1.frx":0000
       Height          =   645
       Left            =   300
       TabIndex        =   6
       Top             =   1230
-      Width           =   3915
+      Width           =   6645
    End
    Begin VB.Label lblKey 
       Caption         =   "Key Value"
