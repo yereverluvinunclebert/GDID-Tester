@@ -266,6 +266,8 @@ Private Sub chkRegularTesting_Click()
     On Error GoTo chkRegularTesting_Click_Error
 
     tmrGDIDTester.Enabled = chkRegularTesting.Value
+    
+    If chkRegularTesting.Value = 0 Then chkAutomaticRemoval.Value = 0
 
     On Error GoTo 0
     Exit Sub
