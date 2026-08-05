@@ -9,13 +9,15 @@ HKEY_CURRENT_USER, "SOFTWARE\Microsoft\IdentityCRL\ExtendedProperties", "lid"
 
 **This key is used to identify your PC and what it accesses on the net.**
 
-The program is very slimline, the first time you run it the GDID key should be visible. It is 32bit but there is a twinproj file in the source that you can use to compile to 64bits using TwinBasic.
+The program is very slimline, tt is 32bit but there is a twinproj file in the source that you can use to compile to 64bits using TwinBasic. 
 
-If enabled it checks the above key value every ten seconds to see if it has changed. You will see that it is repopulated regularly, for example on system startup or resume from sleep.
-If you use Edge or visit any MS site that accesses login.live.com, (Microsoft account, Store, OneDrive, Microsoft 365, account-linked UWP apps) then this value may be re-populated with the same GDID.
-Your local PC contains the cached version, the permanent version is stored on Microsoft's sites.
+The first time you run it the GDID key should be visible by default.
 
 The remove button wipes it locally.
+
+If enabled the program will check the above key value every ten seconds to see if it has been repopulated. You will see that this occurs regularly, for example on system startup or resume from sleep.
+If you use Edge or visit any MS site that accesses login.live.com, (Microsoft account, Store, OneDrive, Microsoft 365, account-linked UWP apps) then this value may be re-populated with the same GDID.
+Your local PC contains the cached version, the permanent version is stored on Microsoft's sites.
 
 This utility will allow you to see when the ID changes by some unknown use of an MS live service or by similar access by a tool you are inadvertently running within windows. 
 
