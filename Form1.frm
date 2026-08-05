@@ -177,6 +177,8 @@ End Sub
 Private Sub btnRemoveRegValue_Click()
     On Error GoTo btnRemoveRegValue_Click_Error
     
+    txtDateTime.Text = ""
+    
     Call readRegistryValue
     
     If txtRegistryValue.Text = "" Then
