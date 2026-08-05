@@ -1,14 +1,22 @@
 VERSION 5.00
 Begin VB.Form Form1 
    Caption         =   "GDID Tester"
-   ClientHeight    =   3255
+   ClientHeight    =   3705
    ClientLeft      =   60
    ClientTop       =   405
    ClientWidth     =   7245
    LinkTopic       =   "Form1"
-   ScaleHeight     =   3255
+   ScaleHeight     =   3705
    ScaleWidth      =   7245
    StartUpPosition =   2  'CenterScreen
+   Begin VB.CheckBox chkRegularTesting 
+      Caption         =   "Enable Regular Testing"
+      Height          =   405
+      Left            =   330
+      TabIndex        =   14
+      Top             =   3120
+      Width           =   2535
+   End
    Begin VB.CheckBox chkAlertMsgBox 
       Caption         =   "Enable Automatic Alert pop-up when found"
       Height          =   405
@@ -30,7 +38,7 @@ Begin VB.Form Form1
       Height          =   405
       Left            =   5490
       TabIndex        =   5
-      Top             =   1620
+      Top             =   2070
       Width           =   1515
    End
    Begin VB.CommandButton btnDismiss 
@@ -38,12 +46,13 @@ Begin VB.Form Form1
       Height          =   435
       Left            =   5490
       TabIndex        =   2
-      Top             =   2580
+      Top             =   3030
       Width           =   1515
    End
-   Begin VB.Timer Timer 
+   Begin VB.Timer tmrGDIDTester 
+      Enabled         =   0   'False
       Interval        =   1000
-      Left            =   4410
+      Left            =   4440
       Top             =   1350
    End
    Begin VB.CommandButton btnRemoveRegValue 
@@ -51,7 +60,7 @@ Begin VB.Form Form1
       Height          =   405
       Left            =   5490
       TabIndex        =   1
-      Top             =   2100
+      Top             =   2550
       Width           =   1515
    End
    Begin VB.TextBox txtRegistryValue 
@@ -86,11 +95,11 @@ Begin VB.Form Form1
       MousePointer    =   1  'Arrow
       TabIndex        =   9
       ToolTipText     =   "Double click here to view a site describing the GDID tracking issue."
-      Top             =   2790
+      Top             =   3210
       Width           =   1545
    End
    Begin VB.Label lblCountdown 
-      Caption         =   "10 - Testing"
+      Caption         =   "Disabled"
       Height          =   255
       Left            =   2130
       TabIndex        =   8
@@ -215,6 +224,27 @@ End Sub
 
 
 '---------------------------------------------------------------------------------------
+' Procedure : chkRegularTesting_Click
+' Author    : beededea
+' Date      : 05/08/2026
+' Purpose   :
+'---------------------------------------------------------------------------------------
+'
+Private Sub chkRegularTesting_Click()
+
+    On Error GoTo chkRegularTesting_Click_Error
+
+    tmrGDIDTester.Enabled = chkRegularTesting.Value
+
+    On Error GoTo 0
+    Exit Sub
+
+chkRegularTesting_Click_Error:
+
+     MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure chkRegularTesting_Click of Form Form1"
+End Sub
+
+'---------------------------------------------------------------------------------------
 ' Procedure : Form_Load
 ' Author    : beededea
 ' Date      : 03/08/2026
@@ -328,17 +358,17 @@ lblGDIDLink_MouseMove_Error:
 End Sub
 
 '---------------------------------------------------------------------------------------
-' Procedure : Timer_Timer
+' Procedure : tmrGDIDTester_tmrGDIDTester
 ' Author    : beededea
 ' Date      : 03/08/2026
 ' Purpose   :
 '---------------------------------------------------------------------------------------
 '
-Private Sub Timer_Timer()
+Private Sub tmrGDIDTester_Timer()
 
     Static timerValue As Long
 
-    On Error GoTo Timer_Timer_Error
+    On Error GoTo tmrGDIDTester_tmrGDIDTester_Error
 
     timerValue = timerValue + 1
     
@@ -353,9 +383,9 @@ Private Sub Timer_Timer()
     On Error GoTo 0
     Exit Sub
 
-Timer_Timer_Error:
+tmrGDIDTester_tmrGDIDTester_Error:
 
-     MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure Timer_Timer of Form Form1"
+     MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure tmrGDIDTester_tmrGDIDTester of Form Form1"
 End Sub
 
 
