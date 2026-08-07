@@ -1,30 +1,45 @@
 VERSION 5.00
 Begin VB.Form Form1 
    Caption         =   "GDID Tester"
-   ClientHeight    =   3630
+   ClientHeight    =   3945
    ClientLeft      =   60
    ClientTop       =   405
-   ClientWidth     =   7245
+   ClientWidth     =   7590
+   Icon            =   "Form1.frx":0000
    LinkTopic       =   "Form1"
-   LockControls    =   -1  'True
-   ScaleHeight     =   3630
-   ScaleWidth      =   7245
+   ScaleHeight     =   3945
+   ScaleWidth      =   7590
    StartUpPosition =   2  'CenterScreen
-   Begin VB.ComboBox cmbDateTime 
-      Height          =   315
-      ItemData        =   "Form1.frx":0000
-      Left            =   5160
-      List            =   "Form1.frx":0007
+   Begin VB.CheckBox Check1 
+      Caption         =   "Enable at Windows Startup"
+      Height          =   405
+      Left            =   330
+      TabIndex        =   17
+      Top             =   3420
+      Width           =   2535
+   End
+   Begin VB.CommandButton btnClear 
+      Height          =   285
+      Left            =   7080
+      Picture         =   "Form1.frx":10CA
+      Style           =   1  'Graphical
+      TabIndex        =   16
+      Top             =   270
+      Width           =   285
+   End
+   Begin VB.CommandButton btnGenerate 
+      Caption         =   "Generate"
+      Height          =   405
+      Left            =   4200
       TabIndex        =   15
-      Text            =   "none found"
-      Top             =   240
-      Width           =   1845
+      Top             =   2850
+      Width           =   1515
    End
    Begin VB.CheckBox chkAutomaticRemoval 
       Caption         =   "Enable Automatic Removal"
       Height          =   405
       Left            =   330
-      TabIndex        =   14
+      TabIndex        =   13
       Top             =   3030
       Width           =   2535
    End
@@ -32,7 +47,7 @@ Begin VB.Form Form1
       Caption         =   "Enable Regular Testing"
       Height          =   405
       Left            =   330
-      TabIndex        =   13
+      TabIndex        =   12
       Top             =   2640
       Width           =   2535
    End
@@ -40,32 +55,24 @@ Begin VB.Form Form1
       Caption         =   "Enable Automatic Alert pop-up when found"
       Height          =   405
       Left            =   330
-      TabIndex        =   11
+      TabIndex        =   10
       Top             =   2220
       Width           =   3675
-   End
-   Begin VB.TextBox txtDateTime 
-      Height          =   345
-      Left            =   5160
-      TabIndex        =   9
-      Text            =   "None Found"
-      Top             =   240
-      Width           =   1845
    End
    Begin VB.CommandButton btnReadRegistry 
       Caption         =   "Read GDID"
       Height          =   405
-      Left            =   5490
+      Left            =   5850
       TabIndex        =   5
-      Top             =   2010
+      Top             =   2370
       Width           =   1515
    End
    Begin VB.CommandButton btnDismiss 
       Caption         =   "Dismiss"
       Height          =   435
-      Left            =   5490
+      Left            =   5850
       TabIndex        =   2
-      Top             =   2940
+      Top             =   3300
       Width           =   1515
    End
    Begin VB.Timer tmrGDIDTester 
@@ -77,9 +84,9 @@ Begin VB.Form Form1
    Begin VB.CommandButton btnRemoveRegValue 
       Caption         =   "Remove"
       Height          =   405
-      Left            =   5490
+      Left            =   5850
       TabIndex        =   1
-      Top             =   2490
+      Top             =   2850
       Width           =   1515
    End
    Begin VB.TextBox txtRegistryValue 
@@ -90,11 +97,21 @@ Begin VB.Form Form1
       Top             =   240
       Width           =   2805
    End
+   Begin VB.ComboBox cmbDateTime 
+      Height          =   315
+      ItemData        =   "Form1.frx":12F7
+      Left            =   5160
+      List            =   "Form1.frx":12FE
+      TabIndex        =   14
+      Text            =   "none found"
+      Top             =   270
+      Width           =   1845
+   End
    Begin VB.Label Label3 
       Caption         =   "Seconds until next test -"
       Height          =   435
       Left            =   300
-      TabIndex        =   12
+      TabIndex        =   11
       Top             =   1890
       Width           =   1785
    End
@@ -102,7 +119,7 @@ Begin VB.Form Form1
       Caption         =   "Date/Time"
       Height          =   435
       Left            =   4200
-      TabIndex        =   10
+      TabIndex        =   9
       Top             =   300
       Width           =   1095
    End
@@ -110,11 +127,11 @@ Begin VB.Form Form1
       Caption         =   "GDID Information"
       ForeColor       =   &H00FF8080&
       Height          =   495
-      Left            =   3600
+      Left            =   4320
       MousePointer    =   1  'Arrow
       TabIndex        =   8
       ToolTipText     =   "Double click here to view a site describing the GDID tracking issue."
-      Top             =   3120
+      Top             =   3480
       Width           =   1545
    End
    Begin VB.Label lblCountdown 
@@ -126,7 +143,7 @@ Begin VB.Form Form1
       Width           =   1935
    End
    Begin VB.Label lblCheckValue 
-      Caption         =   $"Form1.frx":0017
+      Caption         =   $"Form1.frx":130E
       Height          =   645
       Left            =   300
       TabIndex        =   6
@@ -160,6 +177,27 @@ Option Explicit
 Private GDID As String
 
 '---------------------------------------------------------------------------------------
+' Procedure : btnClear_Click
+' Author    : beededea
+' Date      : 07/08/2026
+' Purpose   :
+'---------------------------------------------------------------------------------------
+'
+Private Sub btnClear_Click()
+
+    On Error GoTo btnClear_Click_Error
+
+    cmbDateTime.Clear
+
+    On Error GoTo 0
+    Exit Sub
+
+btnClear_Click_Error:
+
+     MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure btnClear_Click of Form Form1"
+End Sub
+
+'---------------------------------------------------------------------------------------
 ' Procedure : btnDismiss_Click
 ' Author    : beededea
 ' Date      : 03/08/2026
@@ -178,6 +216,28 @@ Private Sub btnDismiss_Click()
 btnDismiss_Click_Error:
 
      MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure btnDismiss_Click of Form Form1"
+End Sub
+
+'---------------------------------------------------------------------------------------
+' Procedure : btnGenerate_Click
+' Author    : beededea
+' Date      : 07/08/2026
+' Purpose   :
+'---------------------------------------------------------------------------------------
+'
+Private Sub btnGenerate_Click()
+
+    On Error GoTo btnGenerate_Click_Error
+
+        Call writeRegistry(HKEY_CURRENT_USER, "SOFTWARE\Microsoft\IdentityCRL\ExtendedProperties", "lid", "0018AAAABBBBCCCC")
+        Call readRegistryValue
+        
+    On Error GoTo 0
+    Exit Sub
+
+btnGenerate_Click_Error:
+
+     MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure btnGenerate_Click of Form Form1"
 End Sub
 
 '---------------------------------------------------------------------------------------
@@ -213,7 +273,7 @@ End Sub
 Private Sub btnRemoveRegValue_Click()
     On Error GoTo btnRemoveRegValue_Click_Error
     
-    txtDateTime.Text = ""
+    ' textDateTime.Text = ""
     
     Call readRegistryValue
     
@@ -433,6 +493,7 @@ End Sub
 Private Sub testGDID()
 
     Dim oldRegValue As String: oldRegValue = vbNullString
+    Dim nowValue As Date
 
     On Error GoTo testGDID_Error
 
@@ -440,20 +501,23 @@ Private Sub testGDID()
     
     Call readRegistryValue
     
-    If oldRegValue <> GDID Then
+    If oldRegValue <> "" Then
         
         If chkAutomaticRemoval.Value = 1 Then
             Call writeRegistry(HKEY_CURRENT_USER, "SOFTWARE\Microsoft\IdentityCRL\ExtendedProperties", "lid", "")
             Call readRegistryValue
         End If
         
-        txtDateTime.Text = Now()
+        nowValue = Now()
         
-        If cmbDateTime.List(cmbDateTime.ListIndex) = "none found" Then
-            cmbDateTime.AddItem CStr(Now()), cmbDateTime.ListIndex
+        If cmbDateTime.Text = "none found" Then
+            cmbDateTime.RemoveItem 0
+            cmbDateTime.AddItem CStr(nowValue), 0
         Else
-            cmbDateTime.AddItem CStr(Now())
+            cmbDateTime.AddItem CStr(nowValue)
         End If
+        
+        cmbDateTime.Text = CStr(nowValue)
         
         If chkAlertMsgBox.Value = 1 Then MsgBox "GDID has changed"
         

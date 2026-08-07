@@ -14,7 +14,7 @@ Description="Tests the GDID value and removes it to impair Microsoft tracking us
 CompatibleMode="0"
 MajorVer=1
 MinorVer=0
-RevisionVer=50
+RevisionVer=61
 AutoIncrementVer=1
 ServerSupportFiles=0
 VersionFileDescription="Tests the GDID value and removes it to impair Microsoft tracking using GDID"
@@ -33,3 +33,16 @@ Unattended=0
 Retained=0
 ThreadPerObject=0
 MaxNumberOfThreads=1
+
+[vbAdvance]
+IsConsole=0
+HasStubFile=0
+GenerateMap=0
+TSAware=0
+XPManifest=0
+ResBuildName=.\GDIDtester.dll
+ReplaceIcon=1
+AppIconFile=.\Resources\binary.ico
+SendCommandArgs=0
+SymbDbgPref=0
+RevisionVersion=0
