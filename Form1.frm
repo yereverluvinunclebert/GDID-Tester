@@ -7,10 +7,11 @@ Begin VB.Form Form1
    ClientWidth     =   7590
    Icon            =   "Form1.frx":0000
    LinkTopic       =   "Form1"
+   LockControls    =   -1  'True
    ScaleHeight     =   3945
    ScaleWidth      =   7590
    StartUpPosition =   2  'CenterScreen
-   Begin VB.CheckBox Check1 
+   Begin VB.CheckBox chkWindowsStartup 
       Caption         =   "Enable at Windows Startup"
       Height          =   405
       Left            =   330
@@ -273,8 +274,6 @@ End Sub
 Private Sub btnRemoveRegValue_Click()
     On Error GoTo btnRemoveRegValue_Click_Error
     
-    ' textDateTime.Text = ""
-    
     Call readRegistryValue
     
     If txtRegistryValue.Text = "" Then
@@ -294,6 +293,62 @@ End Sub
 
 
 '---------------------------------------------------------------------------------------
+' Procedure : chkWindowsStartup_Click
+' Author    : beededea
+' Date      : 08/08/2026
+' Purpose   :
+'---------------------------------------------------------------------------------------
+'
+Private Sub chkWindowsStartup_Click()
+
+    On Error GoTo chkWindowsStartup_Click_Error
+
+    gsWindowsStartup = CStr(chkWindowsStartup.Value)
+    
+    If fFExists(gsSettingsFile) Then
+        sPutINISetting "Software\GDIDTester", "WindowsStartup", gsWindowsStartup, gsSettingsFile
+    End If
+    
+    If gsWindowsStartup = "1" Then
+        Call writeRegistry(HKEY_CURRENT_USER, "SOFTWARE\Microsoft\Windows\CurrentVersion\Run", "GDIDTester", """" & App.Path & "\" & "GDIDTester" & ".exe""")
+    Else
+        Call writeRegistry(HKEY_CURRENT_USER, "SOFTWARE\Microsoft\Windows\CurrentVersion\Run", "GDIDTester", vbNullString)
+    End If
+    
+    On Error GoTo 0
+    Exit Sub
+
+chkWindowsStartup_Click_Error:
+
+     MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure chkWindowsStartup_Click of Form Form1"
+End Sub
+
+'---------------------------------------------------------------------------------------
+' Procedure : chkAlertMsgBox_Click
+' Author    : beededea
+' Date      : 08/08/2026
+' Purpose   : save the alert value
+'---------------------------------------------------------------------------------------
+'
+Private Sub chkAlertMsgBox_Click()
+
+    On Error GoTo chkAlertMsgBox_Click_Error
+    
+    gsAlertMsgBox = CStr(chkAlertMsgBox.Value)
+    
+    If fFExists(gsSettingsFile) Then
+        sPutINISetting "Software\GDIDTester", "AlertMsgBox", gsAlertMsgBox, gsSettingsFile
+    End If
+    
+    On Error GoTo 0
+    Exit Sub
+
+chkAlertMsgBox_Click_Error:
+
+     MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure chkAlertMsgBox_Click of Form Form1"
+End Sub
+
+'---------------------------------------------------------------------------------------
 ' Procedure : chkAutomaticRemoval_Click
 ' Author    : beededea
 ' Date      : 05/08/2026
@@ -303,6 +358,12 @@ End Sub
 Private Sub chkAutomaticRemoval_Click()
 
     On Error GoTo chkAutomaticRemoval_Click_Error
+    
+    gsAutomaticRemoval = CStr(chkAutomaticRemoval.Value)
+    
+    If fFExists(gsSettingsFile) Then
+        sPutINISetting "Software\GDIDTester", "AutomaticRemoval", gsAutomaticRemoval, gsSettingsFile
+    End If
 
     If chkAutomaticRemoval.Value = 1 Then chkRegularTesting.Value = 1
 
@@ -324,7 +385,13 @@ End Sub
 Private Sub chkRegularTesting_Click()
 
     On Error GoTo chkRegularTesting_Click_Error
-
+    
+    gsRegularTesting = CStr(chkRegularTesting.Value)
+    
+    If fFExists(gsSettingsFile) Then
+        sPutINISetting "Software\GDIDTester", "RegularTesting", gsRegularTesting, gsSettingsFile
+    End If
+    
     tmrGDIDTester.Enabled = chkRegularTesting.Value
     
     If chkRegularTesting.Value = 0 Then chkAutomaticRemoval.Value = 0
@@ -338,6 +405,29 @@ chkRegularTesting_Click_Error:
 End Sub
 
 '---------------------------------------------------------------------------------------
+' Procedure : Form_Initialize
+' Author    : beededea
+' Date      : 08/08/2026
+' Purpose   :
+'---------------------------------------------------------------------------------------
+'
+Private Sub Form_Initialize()
+
+    On Error GoTo Form_Initialize_Error
+
+    ' general storage variables declared
+    gsSettingsDir = vbNullString
+    gsSettingsFile = vbNullString
+    
+    On Error GoTo 0
+    Exit Sub
+
+Form_Initialize_Error:
+
+     MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure Form_Initialize of Form Form1"
+End Sub
+
+'---------------------------------------------------------------------------------------
 ' Procedure : Form_Load
 ' Author    : beededea
 ' Date      : 03/08/2026
@@ -347,7 +437,16 @@ End Sub
 Private Sub Form_Load()
 
     On Error GoTo Form_Load_Error
+    
+    Call getToolSettingsFile
+        
+    ' read the program settings from the configuration file
+    Call readSettingsFile("Software\GDIDTester", gsSettingsFile)
+    
+    ' adjust all the preference controls
+    Call adjustControls
 
+    ' read the GDID registry values
     Call readRegistryValue
 
     On Error GoTo 0
@@ -358,6 +457,33 @@ Form_Load_Error:
      MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure Form_Load of Form Form1"
 End Sub
 
+
+'---------------------------------------------------------------------------------------
+' Procedure : adjustControls
+' Author    : beededea
+' Date      : 08/08/2026
+' Purpose   :
+'---------------------------------------------------------------------------------------
+'
+Private Sub adjustControls()
+
+    On Error GoTo adjustControls_Error
+
+        ' general
+        chkWindowsStartup.Value = CInt(gsWindowsStartup)
+        
+        ' configuration
+        chkAlertMsgBox.Value = CInt(gsAlertMsgBox)
+        chkRegularTesting.Value = CInt(gsRegularTesting)
+        chkAutomaticRemoval.Value = CInt(gsAutomaticRemoval)
+
+    On Error GoTo 0
+    Exit Sub
+
+adjustControls_Error:
+
+     MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure adjustControls of Form Form1"
+End Sub
 
 
 '---------------------------------------------------------------------------------------
@@ -408,6 +534,44 @@ Form_Unload_Error:
 End Sub
 
 
+'---------------------------------------------------------------------------------------
+' Procedure : getToolSettingsFile
+' Author    : beededea
+' Date      : 17/10/2019
+' Purpose   : get this tool's settings file and assign to a global var
+'---------------------------------------------------------------------------------------
+'
+Private Sub getToolSettingsFile()
+    On Error GoTo getToolSettingsFile_Error
+    ''If giDebugFlg = 1  Then Debug.Print "%getToolSettingsFile"
+    
+    Dim iFileNo As Integer: iFileNo = 0
+    
+    gsSettingsDir = fSpecialFolder(feUserAppData) & "\GDIDTester"
+    gsSettingsFile = gsSettingsDir & "\settings.ini"
+        
+    'if the folder does not exist then create the folder
+    If Not fDirExists(gsSettingsDir) Then
+        MkDir gsSettingsDir
+    End If
+
+    'if the settings.ini does not exist then create the file by copying
+    If Not fFExists(gsSettingsFile) Then
+
+        iFileNo = FreeFile
+        'open the file for writing
+        Open gsSettingsFile For Output As #iFileNo
+        Close #iFileNo
+    End If
+    
+   On Error GoTo 0
+   Exit Sub
+
+getToolSettingsFile_Error:
+
+    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure getToolSettingsFile of Form modMain"
+
+End Sub
 
 '---------------------------------------------------------------------------------------
 ' Procedure : lblGDIDLink_DblClick
@@ -529,4 +693,35 @@ Private Sub testGDID()
 testGDID_Error:
 
      MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure testGDID of Form Form1"
+End Sub
+
+'---------------------------------------------------------------------------------------
+' Procedure : readSettingsFile
+' Author    : beededea
+' Date      : 12/05/2020
+' Purpose   : read the application's setting file and assign values to public vars
+'---------------------------------------------------------------------------------------
+'
+Public Sub readSettingsFile(ByVal Location As String, ByVal gsSettingsFile As String)
+    On Error GoTo readSettingsFile_Error
+
+    If fFExists(gsSettingsFile) Then
+        
+        ' general
+        gsWindowsStartup = fGetINISetting(Location, "WindowsStartup", gsSettingsFile)
+        
+        ' configuration
+        gsAlertMsgBox = fGetINISetting(Location, "AlertMsgBox", gsSettingsFile)
+        gsRegularTesting = fGetINISetting(Location, "RegularTesting", gsSettingsFile)
+        gsAutomaticRemoval = fGetINISetting(Location, "AutomaticRemoval", gsSettingsFile)
+
+    End If
+
+   On Error GoTo 0
+   Exit Sub
+
+readSettingsFile_Error:
+
+    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure readSettingsFile of Module common2"
+
 End Sub
