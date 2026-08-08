@@ -32,7 +32,8 @@ However, to block this tracking you will need to run a tool such as Windows Fire
 
 For more information on the GDID tracking key visit this link : https://www.it-connect.tech/windows-gdid-impossible-to-delete-but-you-can-block-it/
 
-Later changes:
+Later changes to come:
+* Tooltips
 * write to a logfile to permamently store the GDID change date and times
 * use an API to test the GDID key instead of a timer
 * new code to generate a unique 64bit (16char) GDID
