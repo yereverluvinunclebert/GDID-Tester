@@ -23,6 +23,8 @@ If the Enable Automatic Removal check box is ticked, then the program will wipe 
 
 If the Enable At Windows Startup check box is ticked, then the program will start automatically when your windows o/s restarts.
 
+All the above settings will be saved and restored on program restart.
+
 This utility will allow you to see when the ID changes by some unknown use of an MS live service or by similar access by a tool you are inadvertently running within windows. 
 However, to block this tracking you will need to run a tool such as Windows Firewall Notifier to block any unwanted login.live.com access.
 
