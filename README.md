@@ -33,10 +33,7 @@ However, to block this tracking you will need to run a tool such as Windows Fire
 For more information on the GDID tracking key visit this link : https://www.it-connect.tech/windows-gdid-impossible-to-delete-but-you-can-block-it/
 
 Later changes:
-o write to a logfile to permamently store the GDID change date and times
-
-o use an API to test the GDID key instead of a timer
-
-o new code to generate a unique 64bit (16char) GDID
-
-o automatically regenerate a unique 64bit (16char) GDID when login.live changes the local cache of GDID in the registry obfuscating the GDID.
+* write to a logfile to permamently store the GDID change date and times
+* use an API to test the GDID key instead of a timer
+* new code to generate a unique 64bit (16char) GDID
+* automatically regenerate a unique 64bit (16char) GDID when login.live changes the local cache of GDID in the registry obfuscating the GDID.
