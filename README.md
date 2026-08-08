@@ -34,6 +34,9 @@ For more information on the GDID tracking key visit this link : https://www.it-c
 
 Later changes:
 o write to a logfile to permamently store the GDID change date and times
+
 o use an API to test the GDID key instead of a timer
+
 o new code to generate a unique 64bit (16char) GDID
+
 o automatically regenerate a unique 64bit (16char) GDID when login.live changes the local cache of GDID in the registry obfuscating the GDID.
