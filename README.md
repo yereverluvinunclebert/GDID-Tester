@@ -27,7 +27,11 @@ All the above settings will be saved and restored on program restart.
 
 * The red 'X' button will clear the date/time drop down log showing when the GDID was changed.
 
-* The generate button will allow you to test automatic removal by generating a unique 64bit (16char), a completely random GDID.
+* The Read GDID button will allow you to read the GDID that currently exists within the registry at the above key.
+
+* The Generate button will allow you to test automatic removal by generating a unique 64bit (16char), a completely random GDID.
+
+* The Dismiss button closes the utility.
 
 This utility will allow you to see when the ID changes by some unknown use of an MS live service or by similar access by a tool you are inadvertently running within windows. 
 However, to block this tracking you will need to run a tool such as Windows Firewall Notifier to block any unwanted login.live.com access.
