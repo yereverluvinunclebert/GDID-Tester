@@ -1,5 +1,16 @@
 Attribute VB_Name = "Module1"
+'---------------------------------------------------------------------------------------
+' Module    : Module1
+' Author    : beededea
+' Date      : 08/08/2026
+' Purpose   :
+'---------------------------------------------------------------------------------------
+
 Option Explicit
+
+Private Declare Function RtlGenRandom Lib "advapi32.dll" Alias "SystemFunction036" ( _
+    ByRef Buffer As Any, _
+    ByVal Length As Long) As Long
 
 
 ' General member property variables declared
@@ -196,3 +207,32 @@ gsRegularTesting_Error:
 End Property
 
 
+
+'---------------------------------------------------------------------------------------
+' Procedure : SecureRandomHex64
+' Author    : beededea
+' Date      : 09/08/2026
+' Purpose   :
+'---------------------------------------------------------------------------------------
+'
+Public Function SecureRandomHex64() As String
+
+    Dim b(7) As Byte
+    Dim i As Long
+
+    On Error GoTo SecureRandomHex64_Error
+
+    If RtlGenRandom(b(0), 8) <> 0 Then
+        For i = 0 To 7
+            SecureRandomHex64 = SecureRandomHex64 & Right$("0" & Hex$(b(i)), 2)
+        Next
+    End If
+
+    On Error GoTo 0
+    Exit Function
+
+SecureRandomHex64_Error:
+
+     MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure SecureRandomHex64 of Module Module1"
+
+End Function

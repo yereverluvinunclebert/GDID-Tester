@@ -1,22 +1,30 @@
 VERSION 5.00
 Begin VB.Form Form1 
    Caption         =   "GDID Tester"
-   ClientHeight    =   3945
+   ClientHeight    =   4455
    ClientLeft      =   60
    ClientTop       =   405
    ClientWidth     =   7590
    Icon            =   "Form1.frx":0000
    LinkTopic       =   "Form1"
    LockControls    =   -1  'True
-   ScaleHeight     =   3945
+   ScaleHeight     =   4455
    ScaleWidth      =   7590
    StartUpPosition =   2  'CenterScreen
-   Begin VB.CheckBox chkWindowsStartup 
-      Caption         =   "Enable at Windows Startup"
+   Begin VB.CheckBox chkAutomaticGeneration 
+      Caption         =   "Enable Automatic Replacement of GDID"
       Height          =   405
       Left            =   330
-      TabIndex        =   17
+      TabIndex        =   18
       Top             =   3420
+      Width           =   3285
+   End
+   Begin VB.CheckBox chkWindowsStartup 
+      Caption         =   "Enable at Windows Startup"
+      Height          =   255
+      Left            =   330
+      TabIndex        =   17
+      Top             =   3870
       Width           =   2535
    End
    Begin VB.CommandButton btnClear 
@@ -33,7 +41,7 @@ Begin VB.Form Form1
       Height          =   405
       Left            =   4200
       TabIndex        =   15
-      Top             =   2850
+      Top             =   3360
       Width           =   1515
    End
    Begin VB.CheckBox chkAutomaticRemoval 
@@ -65,7 +73,7 @@ Begin VB.Form Form1
       Height          =   405
       Left            =   5850
       TabIndex        =   5
-      Top             =   2370
+      Top             =   2880
       Width           =   1515
    End
    Begin VB.CommandButton btnDismiss 
@@ -73,7 +81,7 @@ Begin VB.Form Form1
       Height          =   435
       Left            =   5850
       TabIndex        =   2
-      Top             =   3300
+      Top             =   3810
       Width           =   1515
    End
    Begin VB.Timer tmrGDIDTester 
@@ -87,7 +95,7 @@ Begin VB.Form Form1
       Height          =   405
       Left            =   5850
       TabIndex        =   1
-      Top             =   2850
+      Top             =   3360
       Width           =   1515
    End
    Begin VB.TextBox txtRegistryValue 
@@ -131,8 +139,7 @@ Begin VB.Form Form1
       Left            =   4320
       MousePointer    =   1  'Arrow
       TabIndex        =   8
-      ToolTipText     =   "Double click here to view a site describing the GDID tracking issue."
-      Top             =   3480
+      Top             =   3990
       Width           =   1545
    End
    Begin VB.Label lblCountdown 
@@ -173,6 +180,13 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
+'---------------------------------------------------------------------------------------
+' Module    : Form1
+' Author    : beededea
+' Date      : 08/08/2026
+' Purpose   :
+'---------------------------------------------------------------------------------------
+
 Option Explicit
 
 Private GDID As String
@@ -229,9 +243,8 @@ End Sub
 Private Sub btnGenerate_Click()
 
     On Error GoTo btnGenerate_Click_Error
-
-        Call writeRegistry(HKEY_CURRENT_USER, "SOFTWARE\Microsoft\IdentityCRL\ExtendedProperties", "lid", "0018AAAABBBBCCCC")
-        Call readRegistryValue
+    
+        Call generate_Code
         
     On Error GoTo 0
     Exit Sub
@@ -239,6 +252,32 @@ Private Sub btnGenerate_Click()
 btnGenerate_Click_Error:
 
      MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure btnGenerate_Click of Form Form1"
+End Sub
+
+'---------------------------------------------------------------------------------------
+' Procedure : generate_Code
+' Author    : beededea
+' Date      : 09/08/2026
+' Purpose   :
+'---------------------------------------------------------------------------------------
+'
+Private Sub generate_Code()
+
+    Dim newGDID As String
+    
+    On Error GoTo generate_Code_Error
+
+    newGDID = SecureRandomHex64
+
+    Call writeRegistry(HKEY_CURRENT_USER, "SOFTWARE\Microsoft\IdentityCRL\ExtendedProperties", "lid", newGDID)
+    Call readRegistryValue
+        
+    On Error GoTo 0
+    Exit Sub
+
+generate_Code_Error:
+
+     MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure generate_Code of Form Form1"
 End Sub
 
 '---------------------------------------------------------------------------------------
@@ -291,6 +330,27 @@ btnRemoveRegValue_Click_Error:
      MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure btnRemoveRegValue_Click of Form Form1"
 End Sub
 
+
+'---------------------------------------------------------------------------------------
+' Procedure : chkAutomaticGeneration_Click
+' Author    : beededea
+' Date      : 09/08/2026
+' Purpose   :
+'---------------------------------------------------------------------------------------
+'
+Private Sub chkAutomaticGeneration_Click()
+
+    On Error GoTo chkAutomaticGeneration_Click_Error
+
+    
+
+    On Error GoTo 0
+    Exit Sub
+
+chkAutomaticGeneration_Click_Error:
+
+     MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure chkAutomaticGeneration_Click of Form Form1"
+End Sub
 
 '---------------------------------------------------------------------------------------
 ' Procedure : chkWindowsStartup_Click
@@ -445,6 +505,9 @@ Private Sub Form_Load()
     
     ' adjust all the preference controls
     Call adjustControls
+    
+    ' set the tooltips
+    Call setTooltips
 
     ' read the GDID registry values
     Call readRegistryValue
@@ -683,6 +746,8 @@ Private Sub testGDID()
         
         cmbDateTime.Text = CStr(nowValue)
         
+        If chkAutomaticGeneration.Value = 1 Then Call generate_Code
+        
         If chkAlertMsgBox.Value = 1 Then MsgBox "GDID has changed"
         
     End If
@@ -724,4 +789,38 @@ readSettingsFile_Error:
 
     MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure readSettingsFile of Module common2"
 
+End Sub
+
+
+'---------------------------------------------------------------------------------------
+' Procedure : setTooltips
+' Author    : beededea
+' Date      : 09/08/2026
+' Purpose   :
+'---------------------------------------------------------------------------------------
+'
+Private Sub setTooltips()
+
+    On Error GoTo setTooltips_Error
+
+    txtRegistryValue.ToolTipText = "This field shows any GDID that is inserted into the registry key."
+    cmbDateTime.ToolTipText = "This drop down list shows a new date and time recording when the GDID was last changed."
+    chkAlertMsgBox.ToolTipText = "This check box will enable a pop-up message box to appear in the centre of the screen when a GDID is found."
+    chkRegularTesting.ToolTipText = "This check box will enable the regular testing timer."
+    btnClear.ToolTipText = "This button will clear any stored dates/times."
+    chkAutomaticRemoval.ToolTipText = "This check box when enabled will remove any remote-generated GDID."
+    chkAutomaticGeneration.ToolTipText = "This check box when enabled will populate the registry key with a fake GDID"
+    chkWindowsStartup.ToolTipText = "Checking this box will cause this utility to restart on each windows startup."
+    btnGenerate.ToolTipText = "This button generates a new unique 64bit GDID, entirely random."
+    btnReadRegistry.ToolTipText = "This button will read the registry key when you want to check manually."
+    btnRemoveRegValue.ToolTipText = "This button will remove the registry key when you want to do so manually."
+    btnDismiss.ToolTipText = "Click on me to close the utility."
+    lblGDIDLink.ToolTipText = "Double click here to view a site describing the GDID tracking issue."
+
+    On Error GoTo 0
+    Exit Sub
+
+setTooltips_Error:
+
+     MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure setTooltips of Form Form1"
 End Sub
