@@ -3,7 +3,7 @@ GDID Tester utility
 
 A small program in VB6/TwinBasic (nothing special) that allows you to view the GDID value and remove it if you want to stymie a point of tracking by MicroSoft
 
-<img width="508" height="291" alt="image" src="https://github.com/user-attachments/assets/3784c0c7-e37e-47d7-946e-44136412a776" />
+<img width="508" height="348" alt="image" src="https://github.com/user-attachments/assets/6e330031-7690-49c7-8c03-604dfe2c4664" />
 
 HKEY_CURRENT_USER, "SOFTWARE\Microsoft\IdentityCRL\ExtendedProperties", "lid"
 
@@ -11,7 +11,7 @@ HKEY_CURRENT_USER, "SOFTWARE\Microsoft\IdentityCRL\ExtendedProperties", "lid"
 
 The program is very slimline, tt is 32bit but there is a twinproj file in the source that you can use to compile to 64bits using TwinBasic. 
 
-The first time you run it the GDID key should be visible by default.
+The first time you run it the original GDID key should be visible by default. The program stores the original GDID the first time the program runs and then allows you to view and manipulate the GDID.
 
 The remove button wipes it locally.
 
@@ -35,7 +35,7 @@ However, to block this tracking you will need to run a tool such as Windows Fire
 For more information on the GDID tracking key visit this link : https://www.it-connect.tech/windows-gdid-impossible-to-delete-but-you-can-block-it/
 
 Later changes to come:
-* store the original GDID the first time the program runs
+
 * write to a logfile to permamently store the GDID change date and times.
 * use an API to test the GDID key instead of a timer
 * automatically regenerate a unique 64bit (16char) GDID when login.live changes the local cache of GDID in the registry obfuscating the GDID.
