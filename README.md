@@ -44,3 +44,4 @@ Later changes to come:
 * write to a logfile to permamently store the GDID change date and times.
 * use an API to test the GDID key instead of a timer
 * automatically regenerate a unique 64bit (16char) GDID when login.live changes the local cache of GDID in the registry obfuscating the GDID.
+* ensure 64bit compilation
