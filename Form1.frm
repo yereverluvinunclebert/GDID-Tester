@@ -1,22 +1,30 @@
 VERSION 5.00
 Begin VB.Form Form1 
    Caption         =   "GDID Tester"
-   ClientHeight    =   4455
+   ClientHeight    =   4800
    ClientLeft      =   60
    ClientTop       =   405
    ClientWidth     =   7590
    Icon            =   "Form1.frx":0000
    LinkTopic       =   "Form1"
    LockControls    =   -1  'True
-   ScaleHeight     =   4455
+   ScaleHeight     =   4800
    ScaleWidth      =   7590
    StartUpPosition =   2  'CenterScreen
+   Begin VB.TextBox txtOriginalGDID 
+      Height          =   345
+      Left            =   2340
+      TabIndex        =   20
+      Text            =   "Original GDID"
+      Top             =   180
+      Width           =   2295
+   End
    Begin VB.CheckBox chkAutomaticGeneration 
       Caption         =   "Enable Automatic Replacement of GDID"
       Height          =   405
       Left            =   330
       TabIndex        =   18
-      Top             =   3420
+      Top             =   3840
       Width           =   3285
    End
    Begin VB.CheckBox chkWindowsStartup 
@@ -24,7 +32,7 @@ Begin VB.Form Form1
       Height          =   255
       Left            =   330
       TabIndex        =   17
-      Top             =   3870
+      Top             =   4290
       Width           =   2535
    End
    Begin VB.CommandButton btnClear 
@@ -33,15 +41,15 @@ Begin VB.Form Form1
       Picture         =   "Form1.frx":10CA
       Style           =   1  'Graphical
       TabIndex        =   16
-      Top             =   270
+      Top             =   720
       Width           =   285
    End
    Begin VB.CommandButton btnGenerate 
       Caption         =   "Generate"
       Height          =   405
-      Left            =   4200
+      Left            =   5850
       TabIndex        =   15
-      Top             =   3360
+      Top             =   3270
       Width           =   1515
    End
    Begin VB.CheckBox chkAutomaticRemoval 
@@ -49,7 +57,7 @@ Begin VB.Form Form1
       Height          =   405
       Left            =   330
       TabIndex        =   13
-      Top             =   3030
+      Top             =   3450
       Width           =   2535
    End
    Begin VB.CheckBox chkRegularTesting 
@@ -57,7 +65,7 @@ Begin VB.Form Form1
       Height          =   405
       Left            =   330
       TabIndex        =   12
-      Top             =   2640
+      Top             =   3060
       Width           =   2535
    End
    Begin VB.CheckBox chkAlertMsgBox 
@@ -65,7 +73,7 @@ Begin VB.Form Form1
       Height          =   405
       Left            =   330
       TabIndex        =   10
-      Top             =   2220
+      Top             =   2640
       Width           =   3675
    End
    Begin VB.CommandButton btnReadRegistry 
@@ -73,7 +81,7 @@ Begin VB.Form Form1
       Height          =   405
       Left            =   5850
       TabIndex        =   5
-      Top             =   2880
+      Top             =   2310
       Width           =   1515
    End
    Begin VB.CommandButton btnDismiss 
@@ -81,30 +89,30 @@ Begin VB.Form Form1
       Height          =   435
       Left            =   5850
       TabIndex        =   2
-      Top             =   3810
+      Top             =   4140
       Width           =   1515
    End
    Begin VB.Timer tmrGDIDTester 
       Enabled         =   0   'False
       Interval        =   1000
-      Left            =   4290
-      Top             =   1830
+      Left            =   4320
+      Top             =   2340
    End
    Begin VB.CommandButton btnRemoveRegValue 
       Caption         =   "Remove"
       Height          =   405
       Left            =   5850
       TabIndex        =   1
-      Top             =   3360
+      Top             =   2790
       Width           =   1515
    End
    Begin VB.TextBox txtRegistryValue 
       Height          =   345
-      Left            =   1140
+      Left            =   2340
       TabIndex        =   0
-      Text            =   "Registry Value"
-      Top             =   240
-      Width           =   2805
+      Text            =   "Current Registry Value"
+      Top             =   690
+      Width           =   2295
    End
    Begin VB.ComboBox cmbDateTime 
       Height          =   315
@@ -113,33 +121,41 @@ Begin VB.Form Form1
       List            =   "Form1.frx":12FE
       TabIndex        =   14
       Text            =   "none found"
-      Top             =   270
+      Top             =   720
       Width           =   1845
+   End
+   Begin VB.Label Label1 
+      Caption         =   "Original Key Value (GDID)"
+      Height          =   435
+      Left            =   300
+      TabIndex        =   19
+      Top             =   240
+      Width           =   1995
    End
    Begin VB.Label Label3 
       Caption         =   "Seconds until next test -"
       Height          =   435
       Left            =   300
       TabIndex        =   11
-      Top             =   1890
+      Top             =   2310
       Width           =   1785
    End
    Begin VB.Label Label2 
-      Caption         =   "Date/Time"
-      Height          =   435
-      Left            =   4200
+      Caption         =   "Time"
+      Height          =   285
+      Left            =   4680
       TabIndex        =   9
-      Top             =   300
-      Width           =   1095
+      Top             =   780
+      Width           =   975
    End
    Begin VB.Label lblGDIDLink 
       Caption         =   "GDID Information"
       ForeColor       =   &H00FF8080&
-      Height          =   495
-      Left            =   4320
+      Height          =   375
+      Left            =   5220
       MousePointer    =   1  'Arrow
       TabIndex        =   8
-      Top             =   3990
+      Top             =   240
       Width           =   1545
    End
    Begin VB.Label lblCountdown 
@@ -147,7 +163,7 @@ Begin VB.Form Form1
       Height          =   255
       Left            =   2160
       TabIndex        =   7
-      Top             =   1890
+      Top             =   2310
       Width           =   1935
    End
    Begin VB.Label lblCheckValue 
@@ -155,23 +171,23 @@ Begin VB.Form Form1
       Height          =   645
       Left            =   300
       TabIndex        =   6
-      Top             =   1230
+      Top             =   1650
       Width           =   6645
    End
    Begin VB.Label lblKey 
-      Caption         =   "Key Value"
+      Caption         =   "Current Key Value"
       Height          =   435
       Left            =   300
       TabIndex        =   4
-      Top             =   300
-      Width           =   1035
+      Top             =   750
+      Width           =   1305
    End
    Begin VB.Label txtGDID 
       Caption         =   "HKEY_CURRENT_USER, ""SOFTWARE\Microsoft\IdentityCRL\ExtendedProperties"", ""lid"""
       Height          =   465
       Left            =   300
       TabIndex        =   3
-      Top             =   840
+      Top             =   1260
       Width           =   6705
    End
 End
@@ -244,7 +260,7 @@ Private Sub btnGenerate_Click()
 
     On Error GoTo btnGenerate_Click_Error
     
-        Call generate_Code
+    Call generateGDID(False)
         
     On Error GoTo 0
     Exit Sub
@@ -255,29 +271,34 @@ btnGenerate_Click_Error:
 End Sub
 
 '---------------------------------------------------------------------------------------
-' Procedure : generate_Code
+' Procedure : generateGDID
 ' Author    : beededea
 ' Date      : 09/08/2026
 ' Purpose   :
 '---------------------------------------------------------------------------------------
 '
-Private Sub generate_Code()
+Private Sub generateGDID(auto As Boolean)
 
     Dim newGDID As String
     
-    On Error GoTo generate_Code_Error
+    On Error GoTo generateGDID_Error
 
     newGDID = SecureRandomHex64
+    
+    ' store the generated GDID
+    gsAutoGeneratedGDID = newGDID
 
     Call writeRegistry(HKEY_CURRENT_USER, "SOFTWARE\Microsoft\IdentityCRL\ExtendedProperties", "lid", newGDID)
     Call readRegistryValue
         
+    Form1.Caption = "GDID Tester " & newGDID
+    
     On Error GoTo 0
     Exit Sub
 
-generate_Code_Error:
+generateGDID_Error:
 
-     MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure generate_Code of Form Form1"
+     MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure generateGDID of Form Form1"
 End Sub
 
 '---------------------------------------------------------------------------------------
@@ -342,7 +363,7 @@ Private Sub chkAutomaticGeneration_Click()
 
     On Error GoTo chkAutomaticGeneration_Click_Error
 
-    
+    If chkAutomaticGeneration.Value = 1 Then chkAutomaticRemoval.Value = 0
 
     On Error GoTo 0
     Exit Sub
@@ -426,7 +447,8 @@ Private Sub chkAutomaticRemoval_Click()
     End If
 
     If chkAutomaticRemoval.Value = 1 Then chkRegularTesting.Value = 1
-
+    If chkAutomaticRemoval.Value = 1 Then chkAutomaticGeneration.Value = 0
+    
     On Error GoTo 0
     Exit Sub
 
@@ -478,6 +500,7 @@ Private Sub Form_Initialize()
     ' general storage variables declared
     gsSettingsDir = vbNullString
     gsSettingsFile = vbNullString
+    gbFirstTimeRun = False
     
     On Error GoTo 0
     Exit Sub
@@ -498,9 +521,10 @@ Private Sub Form_Load()
 
     On Error GoTo Form_Load_Error
     
+    ' get the location of the tool settings file
     Call getToolSettingsFile
         
-    ' read the program settings from the configuration file
+    ' read the program settings from the configuration settings file
     Call readSettingsFile("Software\GDIDTester", gsSettingsFile)
     
     ' adjust all the preference controls
@@ -511,6 +535,9 @@ Private Sub Form_Load()
 
     ' read the GDID registry values
     Call readRegistryValue
+    
+    ' check the first time run status
+    Call setFirstRunStatus
 
     On Error GoTo 0
     Exit Sub
@@ -519,6 +546,7 @@ Form_Load_Error:
 
      MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure Form_Load of Form Form1"
 End Sub
+
 
 
 '---------------------------------------------------------------------------------------
@@ -532,13 +560,15 @@ Private Sub adjustControls()
 
     On Error GoTo adjustControls_Error
 
-        ' general
-        chkWindowsStartup.Value = CInt(gsWindowsStartup)
-        
-        ' configuration
-        chkAlertMsgBox.Value = CInt(gsAlertMsgBox)
-        chkRegularTesting.Value = CInt(gsRegularTesting)
-        chkAutomaticRemoval.Value = CInt(gsAutomaticRemoval)
+    ' general
+    chkWindowsStartup.Value = CInt(gsWindowsStartup)
+    
+    ' configuration
+    chkAlertMsgBox.Value = CInt(gsAlertMsgBox)
+    chkRegularTesting.Value = CInt(gsRegularTesting)
+    chkAutomaticRemoval.Value = CInt(gsAutomaticRemoval)
+    
+    txtOriginalGDID.Text = gsOriginalGDID
 
     On Error GoTo 0
     Exit Sub
@@ -574,6 +604,37 @@ readRegistryValue_Error:
 End Sub
 
 '---------------------------------------------------------------------------------------
+' Procedure : setFirstRunStatus
+' Author    : beededea
+' Date      : 09/08/2026
+' Purpose   :
+'---------------------------------------------------------------------------------------
+'
+Private Sub setFirstRunStatus()
+
+    On Error GoTo setFirstRunStatus_Error
+
+    If gbFirstTimeRun = True Then
+
+        gsOriginalGDID = GDID
+        gbFirstTimeRun = False
+        
+        ' save the first time run state AND the original GDID
+        If fFExists(gsSettingsFile) Then
+            sPutINISetting "Software\GDIDTester", "FirstTimeRun", gbFirstTimeRun, gsSettingsFile
+            sPutINISetting "Software\GDIDTester", "OriginalGDID", gsOriginalGDID, gsSettingsFile
+        End If
+    End If
+    
+    On Error GoTo 0
+    Exit Sub
+
+setFirstRunStatus_Error:
+
+     MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure setFirstRunStatus of Form Form1"
+End Sub
+
+'---------------------------------------------------------------------------------------
 ' Procedure : Form_Unload
 ' Author    : beededea
 ' Date      : 03/08/2026
@@ -605,10 +666,9 @@ End Sub
 '---------------------------------------------------------------------------------------
 '
 Private Sub getToolSettingsFile()
-    On Error GoTo getToolSettingsFile_Error
-    ''If giDebugFlg = 1  Then Debug.Print "%getToolSettingsFile"
-    
     Dim iFileNo As Integer: iFileNo = 0
+
+    On Error GoTo getToolSettingsFile_Error
     
     gsSettingsDir = fSpecialFolder(feUserAppData) & "\GDIDTester"
     gsSettingsFile = gsSettingsDir & "\settings.ini"
@@ -746,7 +806,7 @@ Private Sub testGDID()
         
         cmbDateTime.Text = CStr(nowValue)
         
-        If chkAutomaticGeneration.Value = 1 Then Call generate_Code
+        If chkAutomaticGeneration.Value = 1 Then Call generateGDID(True)
         
         If chkAlertMsgBox.Value = 1 Then MsgBox "GDID has changed"
         
@@ -773,7 +833,9 @@ Public Sub readSettingsFile(ByVal Location As String, ByVal gsSettingsFile As St
     If fFExists(gsSettingsFile) Then
         
         ' general
+        gbFirstTimeRun = fGetINISetting(Location, "FirstTimeRun", gsSettingsFile)
         gsWindowsStartup = fGetINISetting(Location, "WindowsStartup", gsSettingsFile)
+        gsOriginalGDID = fGetINISetting(Location, "OriginalGDID", gsSettingsFile)
         
         ' configuration
         gsAlertMsgBox = fGetINISetting(Location, "AlertMsgBox", gsSettingsFile)
@@ -816,6 +878,7 @@ Private Sub setTooltips()
     btnRemoveRegValue.ToolTipText = "This button will remove the registry key when you want to do so manually."
     btnDismiss.ToolTipText = "Click on me to close the utility."
     lblGDIDLink.ToolTipText = "Double click here to view a site describing the GDID tracking issue."
+    txtOriginalGDID.ToolTipText = "This is the original GDID that was stored within the registry key."
 
     On Error GoTo 0
     Exit Sub
