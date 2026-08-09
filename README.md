@@ -27,14 +27,15 @@ All the above settings will be saved and restored on program restart.
 
 The red 'X' button will clear the date/time drop down log showing when the GDID was changed.
 
+The generate button will allow you to test automatic removal by generating a unique 64bit (16char), a completely random GDID.
+
 This utility will allow you to see when the ID changes by some unknown use of an MS live service or by similar access by a tool you are inadvertently running within windows. 
 However, to block this tracking you will need to run a tool such as Windows Firewall Notifier to block any unwanted login.live.com access.
 
 For more information on the GDID tracking key visit this link : https://www.it-connect.tech/windows-gdid-impossible-to-delete-but-you-can-block-it/
 
 Later changes to come:
-* Tooltips
-* write to a logfile to permamently store the GDID change date and times
+* store the original GDID the first time the program runs
+* write to a logfile to permamently store the GDID change date and times.
 * use an API to test the GDID key instead of a timer
-* new code to generate a unique 64bit (16char) GDID
 * automatically regenerate a unique 64bit (16char) GDID when login.live changes the local cache of GDID in the registry obfuscating the GDID.
