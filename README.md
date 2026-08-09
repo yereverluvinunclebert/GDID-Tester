@@ -3,7 +3,8 @@ GDID Tester utility
 
 A small program in VB6/TwinBasic (nothing special) that allows you to view the GDID value and remove it if you want to stymie a point of tracking by MicroSoft
 
-<img width="508" height="348" alt="image" src="https://github.com/user-attachments/assets/6e330031-7690-49c7-8c03-604dfe2c4664" />
+<img width="508" height="348" alt="image" src="https://github.com/user-attachments/assets/17c188ef-579d-4637-a17f-d5b983aa838b" />
+
 
 HKEY_CURRENT_USER, "SOFTWARE\Microsoft\IdentityCRL\ExtendedProperties", "lid"
 
