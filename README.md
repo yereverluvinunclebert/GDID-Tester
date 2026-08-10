@@ -1,7 +1,7 @@
 # GDID
 GDID Tester utility
 
-A small program in VB6/TwinBasic (nothing special) that allows you to view the GDID value and remove it if you want to stymie a point of tracking by MicroSoft
+A small program in VB6/TwinBasic (nothing special) that allows you to view the GDID value and remove it if you want to stymie a point of tracking by MicroSoft. The program is very slimline, it is 32bit but there is a twinproj file in the source that you can use to compile to 64bits using TwinBasic. 
 
 <img width="508" height="348" alt="image" src="https://github.com/user-attachments/assets/17c188ef-579d-4637-a17f-d5b983aa838b" />
 
@@ -9,9 +9,7 @@ HKEY_CURRENT_USER, "SOFTWARE\Microsoft\IdentityCRL\ExtendedProperties", "lid"
 
 **This key is used to identify your PC and what it accesses on the net.**
 
-The program is very slimline, it is 32bit but there is a twinproj file in the source that you can use to compile to 64bits using TwinBasic. 
-
-The first time you run it the original GDID key should be visible by default. The program stores the original GDID the first time the program runs and then allows you to view and manipulate the GDID.
+The first time you run it the original GDID key should be visible by default. The program stores the original GDID the first time the program runs and then allows you to view and manipulate the GDID to obfuscate it to avoid tracking.
 
 * The remove button wipes it locally.
 
