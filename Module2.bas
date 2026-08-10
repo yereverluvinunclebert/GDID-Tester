@@ -26,9 +26,9 @@ Private Declare Function RegSetValueEx Lib "advapi32.dll" Alias "RegSetValueExA"
 '------------------------------------------------------ STARTS
 ' APIs for useful functions START
 #If twinbasic Then
-    Public Declare Function ShellExecute Lib "Shell32.dll" Alias "ShellExecuteA" (ByVal hwnd As LongLong, ByVal lpOperation As String, ByVal lpFile As String, ByVal lpParameters As String, ByVal lpDirectory As String, ByVal nShowCmd As Long) As Long
+    Public Declare Function ShellExecute Lib "Shell32.dll" Alias "ShellExecuteA" (ByVal hWnd As LongLong, ByVal lpOperation As String, ByVal lpFile As String, ByVal lpParameters As String, ByVal lpDirectory As String, ByVal nShowCmd As Long) As Long
 #Else
-    Public Declare Function ShellExecute Lib "Shell32.dll" Alias "ShellExecuteA" (ByVal hwnd As Long, ByVal lpOperation As String, ByVal lpFile As String, ByVal lpParameters As String, ByVal lpDirectory As String, ByVal nShowCmd As Long) As Long
+    Public Declare Function ShellExecute Lib "Shell32.dll" Alias "ShellExecuteA" (ByVal hWnd As Long, ByVal lpOperation As String, ByVal lpFile As String, ByVal lpParameters As String, ByVal lpDirectory As String, ByVal nShowCmd As Long) As Long
 #End If
 ' APIs for useful functions END
 '------------------------------------------------------ ENDS
@@ -117,6 +117,7 @@ Private Declare Function WritePrivateProfileString Lib "kernel32" _
     Alias "WritePrivateProfileStringA" (ByVal lpApplicationName As String, ByVal lpKeyName As Any _
     , ByVal lpString As Any, ByVal lpFileName As String) As Long
 '------------------------------------------------------ ENDS
+
 
 
 ' General member property variables declared
