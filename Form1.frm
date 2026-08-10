@@ -534,7 +534,7 @@ Private Sub Form_Load()
 
     On Error GoTo Form_Load_Error
     
-    ' prevent two instance running simultaneously
+    ' prevent two instances running simultaneously
     Call checkPreviousInstance
     
     ' get the location of the tool settings file
