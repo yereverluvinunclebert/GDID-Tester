@@ -424,3 +424,37 @@ fSpecialFolder_Error:
     MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure fSpecialFolder of Module Module1"
 End Function
 
+
+
+'---------------------------------------------------------------------------------------
+' Procedure : writeLogFile
+' Author    : beededea
+' Date      : 22/12/2022
+' Purpose   :
+'---------------------------------------------------------------------------------------
+'
+Public Sub writeLogFile(ByVal inputStr As String, Optional ByVal timestamp As String)
+
+    Dim FN As Integer: FN = 0
+
+    On Error GoTo writeLogFile_Error
+
+    FN = FreeFile
+    
+    ' write the error to the log file
+    Open gsSettingsDir & "\GDIDChangeLog.log" For Append As FN
+    Print #FN, timestamp & " " & inputStr
+    Close FN
+        
+    On Error GoTo 0
+    Exit Sub
+
+writeLogFile_Error:
+
+    With Err
+         If .Number <> 0 Then
+            MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure writeLogFile of Module common"
+            Resume Next
+          End If
+    End With
+End Sub
