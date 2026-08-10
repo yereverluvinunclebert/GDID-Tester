@@ -37,7 +37,8 @@ All the above settings will be saved and restored on program restart.
 * The Dismiss button closes the utility.
 
 This utility will allow you to see when the ID changes by some unknown use of an MS live service or by similar access by a tool you are inadvertently running within windows. 
-However, to block this tracking you will need to run a tool such as Windows Firewall Notifier to block any unwanted login.live.com access.
+It will change the GDID to something random to help prevent tracking on the web. However, to fully block tracking by GDID you may need to run a tool such as Windows Firewall Notifier to prevent any unwanted changes to the GDID 
+via login.live.com access.
 
 For more information on the GDID tracking key visit this link : https://www.it-connect.tech/windows-gdid-impossible-to-delete-but-you-can-block-it/
 
