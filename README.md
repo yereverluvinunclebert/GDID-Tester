@@ -44,4 +44,3 @@ Later changes to come:
 
 * write to a logfile to permamently store the GDID change date and times.
 * use an API to test the GDID key instead of a timer
-* ensure 64bit compilation
