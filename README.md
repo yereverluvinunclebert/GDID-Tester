@@ -1,5 +1,4 @@
-# GDID
-GDID Tester utility
+# GDID Tester utility
 
 A small program in VB6/TwinBasic (nothing special) that allows you to view the GDID value and remove it if you want to stymie a point of tracking by MicroSoft. The program is very slimline, it is 32bit but there is a twinproj file in the source that you can use to compile to 64bits using TwinBasic. 
 
@@ -9,18 +8,18 @@ HKEY_CURRENT_USER, "SOFTWARE\Microsoft\IdentityCRL\ExtendedProperties", "lid"
 
 **This key is used to identify your PC and what it accesses on the net.**
 
-The first time you run it the original GDID key should be visible by default. The program stores the original GDID the first time the program runs and then allows you to view and manipulate the GDID to obfuscate it to avoid tracking.
+The first time you run the program, the original GDID key should be visible by default. The program stores the original GDID the first time it runs and then allows you to view and manipulate the GDID in order to obfuscate it to avoid tracking.
 
-* The remove button wipes it locally.
+* The remove button wipes the GDID manually.
 
 * If the Enable Regular Testing check box is ticked, the program will check the above key value every ten seconds to see if it has been repopulated. You will see that this occurs regularly, for example on system startup or resume from sleep.
   If you use Edge or visit any MS site that accesses login.live.com, (Microsoft account, Store, OneDrive, Microsoft 365, account-linked UWP apps) then this value may be re-populated with the same GDID.
   Your local PC contains the cached version, the permanent version is stored on Microsoft's sites.
 
-* If the Enable Automatic Removal check box is ticked, then the program will wipe the GDID field immediately it is found to be populated. This requires the Regular Testing checkbox to be ticked too.
+* If the Enable Automatic Removal check box is ticked, then the program will wipe the GDID field immediately it is found to be populated. The Regular Testing checkbox will be ticked automatically.
 
-* If the automatic replacement check box is enabled, the program will automatically regenerate a unique 64bit (16char) GDID whenever login.live or similar changes the local GDID key.
-  This will obfuscate the GDID. Note: when the GDID has automatically regenerated once, it will remain.  
+* If the Automatic Replacement check box is enabled, the program will automatically regenerate a unique 64bit (16char) GDID whenever login.live or similar changes the local GDID key.
+  This will obfuscate the GDID. Note: When the GDID has automatically regenerated once, that GDID will remain.  
 
 * If the Enable At Windows Startup check box is ticked, then the program will start automatically when your windows o/s restarts.
 
@@ -42,5 +41,5 @@ For more information on the GDID tracking key visit this link : https://www.it-c
 
 Later changes to come:
 
-* write to a logfile to permamently store the GDID change date and times.
+* write to a logfile to permanently store the GDID change date and times.
 * use an API to test the GDID key instead of a timer
