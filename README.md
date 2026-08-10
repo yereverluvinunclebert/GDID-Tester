@@ -33,6 +33,9 @@ All the above settings will be saved and restored on program restart.
 
 * The Dismiss button closes the utility.
 
+* The utility writes to a logfile to permanently store the GDID change date and times so that you can see what has happened to the GDID over time. The logfile is called GDIDChangeLog.log
+  and it sits in the following folder: C:\USERS\<username>\APPDATA\ROAMING\GDITester
+
 This utility will allow you to see when the ID changes by some unknown use of an MS live service or by similar access by a tool you are inadvertently running within windows. 
 It will change the GDID to something random to help prevent tracking on the web. However, to fully block tracking by GDID you may need to run a tool such as Windows Firewall Notifier to prevent any unwanted changes to the GDID 
 via login.live.com access.
@@ -41,5 +44,4 @@ For more information on the GDID tracking key visit this link : https://www.it-c
 
 Later changes to come:
 
-* write to a logfile to permanently store the GDID change date and times.
 * use an API to test the GDID key instead of a timer
