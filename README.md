@@ -44,4 +44,4 @@ For more information on the GDID tracking key visit this link : https://www.it-c
 
 Later changes to come:
 
-* use an API to test the GDID key instead of a timer
+* use an API to test the GDID key instead of a timer - this will arrive when the language syntax to support mult-threading arrives in TwinBasic.
