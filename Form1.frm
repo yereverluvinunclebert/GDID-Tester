@@ -918,12 +918,18 @@ End Sub
 '---------------------------------------------------------------------------------------
 '
 Public Sub readSettingsFile(ByVal Location As String, ByVal gsSettingsFile As String)
+    
+    Dim boolCheck As String
+        
     On Error GoTo readSettingsFile_Error
 
     If fFExists(gsSettingsFile) Then
+    
+        boolCheck = fGetINISetting(Location, "FirstTimeRun", gsSettingsFile)
+        If boolCheck <> "True" Then boolCheck = False
         
         ' general
-        gbFirstTimeRun = fGetINISetting(Location, "FirstTimeRun", gsSettingsFile)
+        gbFirstTimeRun = CBool(boolCheck)
         gsWindowsStartup = fGetINISetting(Location, "WindowsStartup", gsSettingsFile)
         gsOriginalGDID = fGetINISetting(Location, "OriginalGDID", gsSettingsFile)
         
