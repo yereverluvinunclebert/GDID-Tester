@@ -12,6 +12,23 @@ Begin VB.Form Form1
    ScaleHeight     =   4800
    ScaleWidth      =   7590
    StartUpPosition =   2  'CenterScreen
+   Begin VB.CommandButton btnTicks 
+      Height          =   435
+      Left            =   3960
+      Picture         =   "Form1.frx":10CA
+      Style           =   1  'Graphical
+      TabIndex        =   22
+      Top             =   2220
+      Width           =   405
+   End
+   Begin VB.CommandButton btnLogfile 
+      Caption         =   "View log"
+      Height          =   435
+      Left            =   5850
+      TabIndex        =   21
+      Top             =   3660
+      Width           =   1515
+   End
    Begin VB.TextBox txtOriginalGDID 
       Height          =   345
       Left            =   2340
@@ -39,7 +56,7 @@ Begin VB.Form Form1
    Begin VB.CommandButton btnClear 
       Height          =   285
       Left            =   7080
-      Picture         =   "Form1.frx":10CA
+      Picture         =   "Form1.frx":1543
       Style           =   1  'Graphical
       TabIndex        =   16
       Top             =   720
@@ -50,7 +67,7 @@ Begin VB.Form Form1
       Height          =   405
       Left            =   5850
       TabIndex        =   15
-      Top             =   3270
+      Top             =   3210
       Width           =   1515
    End
    Begin VB.CheckBox chkAutomaticRemoval 
@@ -82,7 +99,7 @@ Begin VB.Form Form1
       Height          =   405
       Left            =   5850
       TabIndex        =   5
-      Top             =   2310
+      Top             =   2250
       Width           =   1515
    End
    Begin VB.CommandButton btnDismiss 
@@ -97,14 +114,14 @@ Begin VB.Form Form1
       Enabled         =   0   'False
       Interval        =   1000
       Left            =   4320
-      Top             =   2340
+      Top             =   3570
    End
    Begin VB.CommandButton btnRemoveRegValue 
       Caption         =   "Remove"
       Height          =   405
       Left            =   5850
       TabIndex        =   1
-      Top             =   2790
+      Top             =   2730
       Width           =   1515
    End
    Begin VB.TextBox txtRegistryValue 
@@ -117,9 +134,9 @@ Begin VB.Form Form1
    End
    Begin VB.ComboBox cmbDateTime 
       Height          =   315
-      ItemData        =   "Form1.frx":12F7
+      ItemData        =   "Form1.frx":1770
       Left            =   5160
-      List            =   "Form1.frx":12FE
+      List            =   "Form1.frx":1777
       TabIndex        =   14
       Text            =   "none found"
       Top             =   720
@@ -168,7 +185,7 @@ Begin VB.Form Form1
       Width           =   3165
    End
    Begin VB.Label lblCheckValue 
-      Caption         =   $"Form1.frx":130E
+      Caption         =   $"Form1.frx":1787
       Height          =   645
       Left            =   300
       TabIndex        =   6
@@ -208,6 +225,27 @@ Option Explicit
 
 Private GDID As String
 
+
+'---------------------------------------------------------------------------------------
+' Procedure : btnLogfile_Click
+' Author    : beededea
+' Date      : 11/08/2026
+' Purpose   :
+'---------------------------------------------------------------------------------------
+'
+Private Sub btnLogfile_Click()
+
+    On Error GoTo btnLogfile_Click_Error
+
+    Call ShellExecute(Form1.hWnd, "Open", gsSettingsDir & "\GDIDChangeLog.log", vbNullString, vbNullString, 1)
+    
+    On Error GoTo 0
+    Exit Sub
+
+btnLogfile_Click_Error:
+
+     MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure btnLogfile_Click of Form Form1"
+End Sub
 
 '---------------------------------------------------------------------------------------
 ' Procedure : Form_Initialize
@@ -829,20 +867,16 @@ End Sub
 '
 Private Sub tmrGDIDTester_Timer()
 
-    'Static timerValue As Long
-
     On Error GoTo tmrGDIDTester_tmrGDIDTester_Error
 
-    'timerValue = timerValue + 1
+    If btnTicks.Visible = True Then
+        btnTicks.Visible = False
+    Else
+        btnTicks.Visible = True
+    End If
     
-    'lblMilliseconds.Caption = CStr(3 - timerValue)
-    
-    'If timerValue >= 3 Then
-        'lblMilliseconds.Caption = "3 - Testing"
-        'timerValue = 0
-        'Call testGDID
-    'End If
-    
+    btnTicks.Refresh
+        
     Call testGDID
 
     On Error GoTo 0
@@ -870,6 +904,7 @@ Private Sub testGDID()
     On Error GoTo testGDID_Error
 
     oldRegValue = GDID
+    nowValue = Now()
     
     Call readRegistryValue
     
@@ -888,7 +923,7 @@ Private Sub testGDID()
                 Call writeLogFile("GDID Generated " & GDID, CStr(nowValue))
             End If
         Else
-            nowValue = Now()
+
             
             If cmbDateTime.Text = "none found" Then
                 cmbDateTime.RemoveItem 0
