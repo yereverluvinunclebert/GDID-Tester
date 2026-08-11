@@ -134,12 +134,12 @@ Begin VB.Form Form1
       Width           =   1995
    End
    Begin VB.Label Label3 
-      Caption         =   "Seconds until next test -"
+      Caption         =   "Timer interval - "
       Height          =   435
       Left            =   300
       TabIndex        =   11
       Top             =   2310
-      Width           =   1785
+      Width           =   1125
    End
    Begin VB.Label Label2 
       Caption         =   "Time"
@@ -159,13 +159,13 @@ Begin VB.Form Form1
       Top             =   240
       Width           =   1545
    End
-   Begin VB.Label lblCountdown 
+   Begin VB.Label lblMilliseconds 
       Caption         =   "Disabled"
       Height          =   255
-      Left            =   2160
+      Left            =   1410
       TabIndex        =   7
       Top             =   2310
-      Width           =   1935
+      Width           =   3165
    End
    Begin VB.Label lblCheckValue 
       Caption         =   $"Form1.frx":130E
@@ -648,6 +648,8 @@ Private Sub adjustControls()
     chkAutomaticGeneration.Value = CInt(gsAutomaticGeneration)
     
     txtOriginalGDID.Text = gsOriginalGDID
+    
+    lblMilliseconds.Caption = tmrGDIDTester.Interval & " milliseconds, running = " & tmrGDIDTester.Enabled
 
     On Error GoTo 0
     Exit Sub
@@ -827,19 +829,21 @@ End Sub
 '
 Private Sub tmrGDIDTester_Timer()
 
-    Static timerValue As Long
+    'Static timerValue As Long
 
     On Error GoTo tmrGDIDTester_tmrGDIDTester_Error
 
-    timerValue = timerValue + 1
+    'timerValue = timerValue + 1
     
-    lblCountdown.Caption = CStr(10 - timerValue)
+    'lblMilliseconds.Caption = CStr(3 - timerValue)
     
-    If timerValue >= 10 Then
-        lblCountdown.Caption = "10 - Testing"
-        timerValue = 0
-        Call testGDID
-    End If
+    'If timerValue >= 3 Then
+        'lblMilliseconds.Caption = "3 - Testing"
+        'timerValue = 0
+        'Call testGDID
+    'End If
+    
+    Call testGDID
 
     On Error GoTo 0
     Exit Sub
