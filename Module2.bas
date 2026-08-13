@@ -3,7 +3,7 @@ Attribute VB_Name = "Module2"
 ' Module    : Module2
 ' Author    : beededea
 ' Date      : 08/08/2026
-' Purpose   :
+' Purpose   : general purpose functions for registry, folders, files and properties for same
 '---------------------------------------------------------------------------------------
 
 Option Explicit
@@ -12,7 +12,6 @@ Option Explicit
 
 '------------------------------------------------------ STARTS
 'constants and APIs defined for querying the registry
-Private Const HKEY_LOCAL_MACHINE As Long = &H80000002
 Public Const HKEY_CURRENT_USER As Long = &H80000001
 Private Const REG_SZ  As Long = 1                          ' Unicode nul terminated string
 
@@ -167,8 +166,6 @@ Public Function getstring(ByRef hKey As Long, ByRef strPath As String, ByRef str
     Dim lDataBufSize As Long: lDataBufSize = 0
     Dim intZeroPos As Integer: intZeroPos = 0
     Dim rvar As Integer: rvar = 0
-    
-    'in .NET the variant type will need to be replaced by object? This code will go altogether as .NET has native functions to read the registry
 
     Dim lValueType As Variant ' cannot initialise
 

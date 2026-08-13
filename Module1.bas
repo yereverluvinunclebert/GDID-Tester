@@ -3,11 +3,12 @@ Attribute VB_Name = "Module1"
 ' Module    : Module1
 ' Author    : beededea
 ' Date      : 08/08/2026
-' Purpose   :
+' Purpose   : mainly for property handling plus a useful function or two
 '---------------------------------------------------------------------------------------
 
 Option Explicit
 
+' using this API as it is available in Windows XP and above, suitable for ReactOS
 Private Declare Function RtlGenRandom Lib "advapi32.dll" Alias "SystemFunction036" ( _
     ByRef Buffer As Any, _
     ByVal Length As Long) As Long
@@ -391,9 +392,9 @@ End Property
 
 '---------------------------------------------------------------------------------------
 ' Procedure : SecureRandomHex64
-' Author    : beededea
+' Author    : chatGPT
 ' Date      : 09/08/2026
-' Purpose   :
+' Purpose   : builds a 64bit 16 character ID string
 '---------------------------------------------------------------------------------------
 '
 Public Function SecureRandomHex64() As String
@@ -403,8 +404,10 @@ Public Function SecureRandomHex64() As String
 
     On Error GoTo SecureRandomHex64_Error
 
-    If RtlGenRandom(b(0), 8) <> 0 Then
+    ' returns a random number and populates an array of 8 byte buffers
+    If RtlGenRandom(b(0), 8) <> 0 Then 'success
         For i = 0 To 7
+            ' builds a string of hex pairs, padding with zero if required.
             SecureRandomHex64 = SecureRandomHex64 & Right$("0" & Hex$(b(i)), 2)
         Next
     End If

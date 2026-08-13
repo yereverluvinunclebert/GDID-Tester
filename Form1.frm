@@ -13,12 +13,13 @@ Begin VB.Form Form1
    ScaleWidth      =   7590
    StartUpPosition =   2  'CenterScreen
    Begin VB.CommandButton btnTicks 
+      Appearance      =   0  'Flat
       Height          =   435
       Left            =   3960
       Picture         =   "Form1.frx":10CA
       Style           =   1  'Graphical
       TabIndex        =   22
-      Top             =   2220
+      Top             =   2190
       Width           =   405
    End
    Begin VB.CommandButton btnLogfile 
@@ -245,6 +246,28 @@ Private Sub btnLogfile_Click()
 btnLogfile_Click_Error:
 
      MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure btnLogfile_Click of Form Form1"
+End Sub
+
+'---------------------------------------------------------------------------------------
+' Procedure : btnTicks_Click
+' Author    : beededea
+' Date      : 11/08/2026
+' Purpose   :
+'---------------------------------------------------------------------------------------
+'
+Private Sub btnTicks_Click()
+
+    On Error GoTo btnTicks_Click_Error
+    
+    btnTicks.Tag = "Hidden"
+    btnTicks.Visible = False
+
+    On Error GoTo 0
+    Exit Sub
+
+btnTicks_Click_Error:
+
+     MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure btnTicks_Click of Form Form1"
 End Sub
 
 '---------------------------------------------------------------------------------------
@@ -618,13 +641,11 @@ End Sub
 '---------------------------------------------------------------------------------------
 '
 Private Sub checkPreviousInstance()
-
-    Dim ans As VbMsgBoxResult
-    
+  
     On Error GoTo checkPreviousInstance_Error
 
     If App.PrevInstance = True Then
-        ans = MsgBox("Previous instance aready running, please close the other instance and try again.")
+        MsgBox ("Previous instance aready running, please close the other instance and try again.")
         Unload Form1
     End If
         
@@ -869,13 +890,14 @@ Private Sub tmrGDIDTester_Timer()
 
     On Error GoTo tmrGDIDTester_tmrGDIDTester_Error
 
-    If btnTicks.Visible = True Then
-        btnTicks.Visible = False
-    Else
-        btnTicks.Visible = True
+    If btnTicks.Tag <> "Hidden" Then
+        If btnTicks.Visible = True Then
+            btnTicks.Visible = False
+        Else
+            btnTicks.Visible = True
+        End If
+        btnTicks.Refresh
     End If
-    
-    btnTicks.Refresh
         
     Call testGDID
 
@@ -1015,6 +1037,7 @@ Private Sub setTooltips()
     btnDismiss.ToolTipText = "Click on me to close the utility."
     lblGDIDLink.ToolTipText = "Double click here to view a site describing the GDID tracking issue."
     txtOriginalGDID.ToolTipText = "This is the original GDID that was stored within the registry key."
+    btnTicks.ToolTipText = "Click on me and this image will disappear but the timer will still run in the background"
 
     On Error GoTo 0
     Exit Sub
