@@ -19,7 +19,7 @@ The first time you run the program, the original GDID key should be visible by d
 * If the Enable Automatic Removal check box is ticked, then the program will wipe the GDID field immediately it is found to be populated. The Regular Testing checkbox will be ticked automatically.
 
 * If the Automatic Replacement check box is enabled, the program will automatically regenerate a unique 64bit (16char) GDID whenever login.live or similar changes the local GDID key.
-  This will obfuscate the GDID. Note: The program will always create a new GDID when it first runs but once it has done that, the GDID will remain.  
+  This will obfuscate the GDID. Note: The program will always create a new GDID when it first runs but once it has done that, the GDID will remain.  It will not generate a new GDID when the current GDID is blank.
 
 * If the Enable At Windows Startup check box is ticked, then the program will start automatically when your windows o/s restarts.
 
