@@ -33,6 +33,7 @@ Begin VB.Form Form1
    Begin VB.TextBox txtOriginalGDID 
       Height          =   345
       Left            =   2340
+      Locked          =   -1  'True
       TabIndex        =   20
       Text            =   "Original GDID"
       Top             =   180
@@ -128,6 +129,7 @@ Begin VB.Form Form1
    Begin VB.TextBox txtRegistryValue 
       Height          =   345
       Left            =   2340
+      Locked          =   -1  'True
       TabIndex        =   0
       Text            =   "Current Registry Value"
       Top             =   690
@@ -138,6 +140,7 @@ Begin VB.Form Form1
       ItemData        =   "Form1.frx":1770
       Left            =   5160
       List            =   "Form1.frx":1777
+      Locked          =   -1  'True
       TabIndex        =   14
       Text            =   "none found"
       Top             =   720
