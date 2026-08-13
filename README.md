@@ -2,7 +2,7 @@
 
 A small program in VB6/TwinBasic (nothing special) that allows you to view the GDID value and remove it if you want to stymie a point of tracking by MicroSoft. The program is very slimline, it is 32bit but there is a twinproj file in the source that you can use to compile to 64bits using TwinBasic. 
 
-<img width="508" height="348" alt="image" src="https://github.com/user-attachments/assets/17c188ef-579d-4637-a17f-d5b983aa838b" />
+<img width="508" height="347" alt="image" src="https://github.com/user-attachments/assets/2188272e-fbd6-4233-a717-44a9514fe3e2" />
 
 HKEY_CURRENT_USER, "SOFTWARE\Microsoft\IdentityCRL\ExtendedProperties", "lid"
 
@@ -30,6 +30,8 @@ All the above settings will be saved and restored on program restart.
 * The Read GDID button will allow you to read the GDID that currently exists within the registry at the above key.
 
 * The Generate button will allow you to test automatic removal by generating a unique 64bit (16char), a completely random GDID. The automatic replacement can also be tested.
+
+* The View log will open the change log text file to show the dates and times that the GDID has been changed, either by remote modification or by local auto-generation using this tool.
 
 * The Dismiss button closes the utility.
 
