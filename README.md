@@ -2,13 +2,15 @@
 
 A small program in VB6/TwinBasic (nothing special) that allows you to view the GDID value and remove it if you want to stymie a point of tracking by MicroSoft. The program is very slimline, it is 32bit but there is a twinproj file in the source that you can use to compile to 64bits using TwinBasic. 
 
-<img width="508" height="347" alt="image" src="https://github.com/user-attachments/assets/2188272e-fbd6-4233-a717-44a9514fe3e2" />
+<img width="531" height="381" alt="image" src="https://github.com/user-attachments/assets/5aa37de5-6cb9-4070-9709-ae91ce2b71af" />
 
 HKEY_CURRENT_USER, "SOFTWARE\Microsoft\IdentityCRL\ExtendedProperties", "lid"
 
 **This key is used to identify your PC and what it accesses on the net.**
 
 The first time you run the program, the original GDID key should be visible by default. The program stores the original GDID the first time it runs and then allows you to view and manipulate the GDID in order to obfuscate it to avoid tracking.
+
+* Change the run interval by moving the slider.
 
 * The remove button wipes the GDID manually.
 
