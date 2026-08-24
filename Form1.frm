@@ -1,40 +1,57 @@
 VERSION 5.00
+Object = "{13E244CC-5B1A-45EA-A5BC-D3906B9ABB79}#1.0#0"; "CCRSlider.ocx"
 Begin VB.Form Form1 
    BorderStyle     =   1  'Fixed Single
    Caption         =   "GDID Tester"
-   ClientHeight    =   4800
+   ClientHeight    =   5310
    ClientLeft      =   45
    ClientTop       =   390
-   ClientWidth     =   7590
+   ClientWidth     =   7935
    Icon            =   "Form1.frx":0000
    LinkTopic       =   "Form1"
    LockControls    =   -1  'True
-   ScaleHeight     =   4800
-   ScaleWidth      =   7590
+   ScaleHeight     =   5310
+   ScaleWidth      =   7935
    StartUpPosition =   2  'CenterScreen
+   Begin VB.Timer tmrTicker 
+      Enabled         =   0   'False
+      Interval        =   1000
+      Left            =   4770
+      Top             =   3570
+   End
+   Begin CCRSlider.Slider sliGDIDInterval 
+      Height          =   405
+      Left            =   180
+      TabIndex        =   22
+      Top             =   2250
+      Width           =   4755
+      _ExtentX        =   8387
+      _ExtentY        =   714
+      LargeChange     =   1
+   End
    Begin VB.CommandButton btnTicks 
       Appearance      =   0  'Flat
       Height          =   435
-      Left            =   3960
+      Left            =   5820
       Picture         =   "Form1.frx":10CA
       Style           =   1  'Graphical
-      TabIndex        =   22
-      Top             =   2190
+      TabIndex        =   21
+      Top             =   2250
       Width           =   405
    End
    Begin VB.CommandButton btnLogfile 
       Caption         =   "View log"
       Height          =   435
-      Left            =   5850
-      TabIndex        =   21
-      Top             =   3660
+      Left            =   6210
+      TabIndex        =   20
+      Top             =   4230
       Width           =   1515
    End
    Begin VB.TextBox txtOriginalGDID 
       Height          =   345
       Left            =   2340
       Locked          =   -1  'True
-      TabIndex        =   20
+      TabIndex        =   19
       Text            =   "Original GDID"
       Top             =   180
       Width           =   2295
@@ -43,73 +60,73 @@ Begin VB.Form Form1
       Caption         =   "Enable Automatic Replacement of GDID"
       Height          =   405
       Left            =   330
-      TabIndex        =   18
-      Top             =   3840
+      TabIndex        =   17
+      Top             =   4410
       Width           =   3285
    End
    Begin VB.CheckBox chkWindowsStartup 
       Caption         =   "Enable at Windows Startup"
       Height          =   255
       Left            =   330
-      TabIndex        =   17
-      Top             =   4290
+      TabIndex        =   16
+      Top             =   4860
       Width           =   2535
    End
    Begin VB.CommandButton btnClear 
       Height          =   285
-      Left            =   7080
+      Left            =   7440
       Picture         =   "Form1.frx":1543
       Style           =   1  'Graphical
-      TabIndex        =   16
+      TabIndex        =   15
       Top             =   720
       Width           =   285
    End
    Begin VB.CommandButton btnGenerate 
       Caption         =   "Generate"
       Height          =   405
-      Left            =   5850
-      TabIndex        =   15
-      Top             =   3210
+      Left            =   6210
+      TabIndex        =   14
+      Top             =   3780
       Width           =   1515
    End
    Begin VB.CheckBox chkAutomaticRemoval 
       Caption         =   "Enable Automatic Removal"
       Height          =   405
       Left            =   330
-      TabIndex        =   13
-      Top             =   3450
+      TabIndex        =   12
+      Top             =   4020
       Width           =   2535
    End
    Begin VB.CheckBox chkRegularTesting 
       Caption         =   "Enable Regular Testing"
       Height          =   405
       Left            =   330
-      TabIndex        =   12
-      Top             =   3060
+      TabIndex        =   11
+      Top             =   3630
       Width           =   2535
    End
    Begin VB.CheckBox chkAlertMsgBox 
       Caption         =   "Enable Automatic Alert pop-up when found"
       Height          =   405
       Left            =   330
-      TabIndex        =   10
-      Top             =   2640
+      TabIndex        =   9
+      Top             =   3210
       Width           =   3675
    End
    Begin VB.CommandButton btnReadRegistry 
       Caption         =   "Read GDID"
       Height          =   405
-      Left            =   5850
+      Left            =   6210
       TabIndex        =   5
-      Top             =   2250
+      Top             =   2820
       Width           =   1515
    End
    Begin VB.CommandButton btnDismiss 
       Caption         =   "Dismiss"
       Height          =   435
-      Left            =   5850
+      Left            =   6210
       TabIndex        =   2
-      Top             =   4140
+      Top             =   4710
       Width           =   1515
    End
    Begin VB.Timer tmrGDIDTester 
@@ -121,9 +138,9 @@ Begin VB.Form Form1
    Begin VB.CommandButton btnRemoveRegValue 
       Caption         =   "Remove"
       Height          =   405
-      Left            =   5850
+      Left            =   6210
       TabIndex        =   1
-      Top             =   2730
+      Top             =   3300
       Width           =   1515
    End
    Begin VB.TextBox txtRegistryValue 
@@ -138,35 +155,51 @@ Begin VB.Form Form1
    Begin VB.ComboBox cmbDateTime 
       Height          =   315
       ItemData        =   "Form1.frx":1770
-      Left            =   5160
+      Left            =   5130
       List            =   "Form1.frx":1777
       Locked          =   -1  'True
-      TabIndex        =   14
+      TabIndex        =   13
       Text            =   "none found"
       Top             =   720
-      Width           =   1845
+      Width           =   2235
+   End
+   Begin VB.Label Label4 
+      Caption         =   "10 secs"
+      Height          =   255
+      Left            =   4410
+      TabIndex        =   24
+      Top             =   2880
+      Width           =   645
+   End
+   Begin VB.Label lblOneSecond 
+      Caption         =   "0 sec"
+      Height          =   255
+      Left            =   330
+      TabIndex        =   23
+      Top             =   2880
+      Width           =   435
    End
    Begin VB.Label Label1 
       Caption         =   "Original Key Value (GDID)"
       Height          =   435
       Left            =   300
-      TabIndex        =   19
+      TabIndex        =   18
       Top             =   240
       Width           =   1995
    End
-   Begin VB.Label Label3 
-      Caption         =   "Timer interval - "
+   Begin VB.Label lblMilliseconds 
+      Caption         =   "Timer interval "
       Height          =   435
-      Left            =   300
-      TabIndex        =   11
-      Top             =   2310
-      Width           =   1125
+      Left            =   1350
+      TabIndex        =   10
+      Top             =   2880
+      Width           =   2625
    End
    Begin VB.Label Label2 
       Caption         =   "Time"
       Height          =   285
       Left            =   4680
-      TabIndex        =   9
+      TabIndex        =   8
       Top             =   780
       Width           =   975
    End
@@ -176,17 +209,9 @@ Begin VB.Form Form1
       Height          =   375
       Left            =   5220
       MousePointer    =   1  'Arrow
-      TabIndex        =   8
+      TabIndex        =   7
       Top             =   240
       Width           =   1545
-   End
-   Begin VB.Label lblMilliseconds 
-      Caption         =   "Disabled"
-      Height          =   255
-      Left            =   1410
-      TabIndex        =   7
-      Top             =   2310
-      Width           =   3165
    End
    Begin VB.Label lblCheckValue 
       Caption         =   $"Form1.frx":1787
@@ -680,7 +705,8 @@ Private Sub validateInputs()
     If gsRegularTesting = "" Then gsRegularTesting = "0"
     If gsAutomaticRemoval = "" Then gsAutomaticRemoval = "0"
     If gsAutomaticGeneration = "" Then gsAutomaticGeneration = "0"
-
+    If gsGDIDInterval = "" Then gsGDIDInterval = "3"
+    
     On Error GoTo 0
     Exit Sub
 
@@ -708,6 +734,7 @@ Private Sub adjustControls()
     chkRegularTesting.Value = CInt(gsRegularTesting)
     chkAutomaticRemoval.Value = CInt(gsAutomaticRemoval)
     chkAutomaticGeneration.Value = CInt(gsAutomaticGeneration)
+    sliGDIDInterval.Value = CInt(gsGDIDInterval)
     
     txtOriginalGDID.Text = gsOriginalGDID
     
@@ -883,6 +910,45 @@ lblGDIDLink_MouseMove_Error:
 End Sub
 
 '---------------------------------------------------------------------------------------
+' Procedure : sliGDIDInterval_Change
+' Author    : beededea
+' Date      : 24/08/2026
+' Purpose   :
+'---------------------------------------------------------------------------------------
+'
+Private Sub sliGDIDInterval_Change()
+
+    On Error GoTo sliGDIDInterval_Change_Error
+
+    gsGDIDInterval = CStr(sliGDIDInterval.Value)
+    
+    tmrGDIDTester.Interval = sliGDIDInterval.Value * 1000
+    
+    If sliGDIDInterval.Value <= 0 Then
+        tmrGDIDTester.Enabled = False
+        btnTicks.Visible = False
+    Else
+        tmrGDIDTester.Enabled = True
+    End If
+    
+    If fFExists(gsSettingsFile) Then
+        sPutINISetting "Software\GDIDTester", "GDIDInterval", gsGDIDInterval, gsSettingsFile
+    End If
+    
+    lblMilliseconds.Caption = tmrGDIDTester.Interval & " milliseconds, running = " & tmrGDIDTester.Enabled
+    
+
+    On Error GoTo 0
+    Exit Sub
+
+sliGDIDInterval_Change_Error:
+
+     MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure sliGDIDInterval_Change of Form Form1"
+End Sub
+
+
+
+'---------------------------------------------------------------------------------------
 ' Procedure : tmrGDIDTester_tmrGDIDTester
 ' Author    : beededea
 ' Date      : 03/08/2026
@@ -890,17 +956,10 @@ End Sub
 '---------------------------------------------------------------------------------------
 '
 Private Sub tmrGDIDTester_Timer()
-
+ 
     On Error GoTo tmrGDIDTester_tmrGDIDTester_Error
-
-    If btnTicks.Tag <> "Hidden" Then
-        If btnTicks.Visible = True Then
-            btnTicks.Visible = False
-        Else
-            btnTicks.Visible = True
-        End If
-        btnTicks.Refresh
-    End If
+    
+    tmrTicker.Enabled = True
         
     Call testGDID
 
@@ -945,11 +1004,12 @@ Private Sub testGDID()
             ' if the GDID is the same as the stored generated GDID then there is no need to generate new
             If gsAutoGeneratedGDID <> txtRegistryValue.Text Then
                 Call generateGDID(True)
-                Call writeLogFile("GDID Generated " & GDID, CStr(nowValue))
+                Call writeLogFile("GDID auto-generated " & GDID, CStr(nowValue))
+                
+                If chkAlertMsgBox.Value = 1 Then MsgBox "GDID has been auto-generated"
             End If
         Else
 
-            
             If cmbDateTime.Text = "none found" Then
                 cmbDateTime.RemoveItem 0
                 cmbDateTime.AddItem CStr(nowValue), 0
@@ -959,11 +1019,11 @@ Private Sub testGDID()
             
             cmbDateTime.Text = CStr(nowValue)
             Call writeLogFile("GDID Changed " & GDID, CStr(nowValue))
+            
+            If chkAlertMsgBox.Value = 1 Then MsgBox "GDID has been changed"
                     
         End If
-        
-        If chkAlertMsgBox.Value = 1 Then MsgBox "GDID has changed"
-        
+                
     End If
 
     On Error GoTo 0
@@ -1002,6 +1062,7 @@ Public Sub readSettingsFile(ByVal Location As String, ByVal gsSettingsFile As St
         gsRegularTesting = fGetINISetting(Location, "RegularTesting", gsSettingsFile)
         gsAutomaticRemoval = fGetINISetting(Location, "AutomaticRemoval", gsSettingsFile)
         gsAutomaticGeneration = fGetINISetting(Location, "AutomaticGeneration", gsSettingsFile)
+        gsGDIDInterval = fGetINISetting(Location, "GDIDInterval", gsSettingsFile)
 
     End If
 
@@ -1048,4 +1109,34 @@ Private Sub setTooltips()
 setTooltips_Error:
 
      MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure setTooltips of Form Form1"
+End Sub
+
+'---------------------------------------------------------------------------------------
+' Procedure : tmrTicker_Timer
+' Author    : beededea
+' Date      : 24/08/2026
+' Purpose   :
+'---------------------------------------------------------------------------------------
+'
+Private Sub tmrTicker_Timer()
+
+    On Error GoTo tmrTicker_Timer_Error
+
+      If btnTicks.Tag <> "Hidden" Then
+        If btnTicks.Visible = True Then
+            btnTicks.Visible = False
+            tmrTicker.Enabled = False
+        Else
+            btnTicks.Visible = True
+        End If
+        
+        btnTicks.Refresh
+    End If
+    
+    On Error GoTo 0
+    Exit Sub
+
+tmrTicker_Timer_Error:
+
+     MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure tmrTicker_Timer of Form Form1"
 End Sub
