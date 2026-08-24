@@ -2,7 +2,7 @@
 
 A small program in VB6/TwinBasic (nothing special) that allows you to view the GDID value and remove it if you want to stymie a point of tracking by MicroSoft. The program is very slimline, it is 32bit but there is a twinproj file in the source that you can use to compile to 64bits using TwinBasic. 
 
-<img width="531" height="381" alt="image" src="https://github.com/user-attachments/assets/5aa37de5-6cb9-4070-9709-ae91ce2b71af" />
+<img width="531" height="381" alt="image" src="https://github.com/user-attachments/assets/034a945f-5993-41ff-a0d0-c8d295b1764e" />
 
 HKEY_CURRENT_USER, "SOFTWARE\Microsoft\IdentityCRL\ExtendedProperties", "lid"
 
@@ -10,13 +10,13 @@ HKEY_CURRENT_USER, "SOFTWARE\Microsoft\IdentityCRL\ExtendedProperties", "lid"
 
 The first time you run the program, the original GDID key should be visible by default. The program stores the original GDID the first time it runs and then allows you to view and manipulate the GDID in order to obfuscate it to avoid tracking.
 
-* Change the run interval by moving the slider.
-
-* The remove button wipes the GDID manually.
+* Change the run interval by moving the slider. Setting the slider to 0 secs will stop the testing timer.
 
 * If the Enable Regular Testing check box is ticked, the program will check the above key value every ten seconds to see if it has been repopulated. You will see that this occurs regularly, for example on system startup or resume from sleep.
   If you use Edge or visit any MS site that accesses login.live.com, (Microsoft account, Store, OneDrive, Microsoft 365, account-linked UWP apps) then this value may be re-populated with the same GDID.
   Your local PC contains the cached version, the permanent version is stored on Microsoft's sites.
+
+* The remove button wipes the GDID manually.
 
 * If the Enable Automatic Removal check box is ticked, then the program will wipe the GDID field immediately it is found to be populated. The Regular Testing checkbox will be ticked automatically.
 
