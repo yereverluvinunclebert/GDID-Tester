@@ -41,8 +41,8 @@ All the above settings will be saved and restored on program restart.
   and it sits in the following folder: C:\USERS\<username>\APPDATA\ROAMING\GDITester
 
 This utility will allow you to see when the ID changes by some unknown use of an MS live service or by similar access by a tool you are inadvertently running within windows. 
-It will change the GDID to something random to help prevent tracking on the web. However, to fully block tracking by GDID you may need to run a tool such as Windows Firewall Notifier to prevent any unwanted changes to the GDID 
-via login.live.com access.
+It will change the GDID to something random to help prevent tracking on the web. This utility can make a change within 1 second of a change being made, however, to fully prevent and block tracking by GDID 
+you could run a tool such as "Windows Firewall Notifier" that can configured to prevent any unwanted changes to the GDID by preventing login.live.com access to your computer.
 
 For more information on the GDID tracking key visit this link : https://www.it-connect.tech/windows-gdid-impossible-to-delete-but-you-can-block-it/
 
