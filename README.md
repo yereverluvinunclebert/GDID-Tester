@@ -2,7 +2,7 @@
 
 A small program in VB6/TwinBasic (nothing special) that allows you to view the GDID value and remove it if you want to stymie a point of tracking by MicroSoft. The program is very slimline, it is 32bit but there is a twinproj file in the source that you can use to compile to 64bits using TwinBasic. 
 
-<img width="508" height="347" alt="image" src="https://github.com/user-attachments/assets/2188272e-fbd6-4233-a717-44a9514fe3e2" />
+<img width="531" height="381" alt="image" src="https://github.com/user-attachments/assets/88f14ed3-7bbd-4df7-9e97-db98bec7155d" />
 
 HKEY_CURRENT_USER, "SOFTWARE\Microsoft\IdentityCRL\ExtendedProperties", "lid"
 
@@ -10,11 +10,13 @@ HKEY_CURRENT_USER, "SOFTWARE\Microsoft\IdentityCRL\ExtendedProperties", "lid"
 
 The first time you run the program, the original GDID key should be visible by default. The program stores the original GDID the first time it runs and then allows you to view and manipulate the GDID in order to obfuscate it to avoid tracking.
 
-* The remove button wipes the GDID manually.
+* Change the run interval by moving the slider. Setting the slider to 0 secs will stop the testing timer.
 
 * If the Enable Regular Testing check box is ticked, the program will check the above key value every ten seconds to see if it has been repopulated. You will see that this occurs regularly, for example on system startup or resume from sleep.
   If you use Edge or visit any MS site that accesses login.live.com, (Microsoft account, Store, OneDrive, Microsoft 365, account-linked UWP apps) then this value may be re-populated with the same GDID.
   Your local PC contains the cached version, the permanent version is stored on Microsoft's sites.
+
+* The remove button wipes the GDID manually.
 
 * If the Enable Automatic Removal check box is ticked, then the program will wipe the GDID field immediately it is found to be populated. The Regular Testing checkbox will be ticked automatically.
 
@@ -39,8 +41,8 @@ All the above settings will be saved and restored on program restart.
   and it sits in the following folder: C:\USERS\<username>\APPDATA\ROAMING\GDITester
 
 This utility will allow you to see when the ID changes by some unknown use of an MS live service or by similar access by a tool you are inadvertently running within windows. 
-It will change the GDID to something random to help prevent tracking on the web. However, to fully block tracking by GDID you may need to run a tool such as Windows Firewall Notifier to prevent any unwanted changes to the GDID 
-via login.live.com access.
+It will change the GDID to something random to help prevent tracking on the web. This utility can make a change within 1 second of a change being made, however, to fully prevent and block tracking by GDID 
+you could run a tool such as ["Windows Firewall Notifier"](https://github.com/wokhan/WFN) that can configured to prevent any unwanted changes to the GDID by preventing login.live.com access to your computer.
 
 For more information on the GDID tracking key visit this link : https://www.it-connect.tech/windows-gdid-impossible-to-delete-but-you-can-block-it/
 
