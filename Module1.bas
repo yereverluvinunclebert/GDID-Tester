@@ -8,10 +8,16 @@ Attribute VB_Name = "Module1"
 
 Option Explicit
 
+' ** requires windevlib package for 64bit operation using TwinBasic **
+
+
 ' using this API as it is available in Windows XP and above, suitable for ReactOS
-Private Declare Function RtlGenRandom Lib "advapi32.dll" Alias "SystemFunction036" ( _
-    ByRef Buffer As Any, _
-    ByVal Length As Long) As Long
+#If Not WIN64 Then ' VB6 only
+
+    Private Declare Function RtlGenRandom Lib "advapi32.dll" Alias "SystemFunction036" ( _
+        ByRef Buffer As Any, _
+        ByVal Length As Long) As Long ' no longPtrs
+#End If
 
 
 ' General member property variables declared

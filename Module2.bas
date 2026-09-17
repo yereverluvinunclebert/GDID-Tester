@@ -8,26 +8,27 @@ Attribute VB_Name = "Module2"
 
 Option Explicit
 
-
+' ** requires windevlib package for 64bit operation using TwinBasic **
 
 '------------------------------------------------------ STARTS
 'constants and APIs defined for querying the registry
 Public Const HKEY_CURRENT_USER As Long = &H80000001
 Private Const REG_SZ  As Long = 1                          ' Unicode nul terminated string
 
-Private Declare Function RegOpenKey Lib "advapi32.dll" Alias "RegOpenKeyA" (ByVal hKey As Long, ByVal lpSubKey As String, ByRef phkResult As Long) As Long
-Private Declare Function RegQueryValueEx Lib "advapi32.dll" Alias "RegQueryValueExA" (ByVal hKey As Long, ByVal lpValueName As String, ByVal lpReserved As Long, ByRef lpType As Long, ByRef lpData As Any, ByRef lpcbData As Long) As Long
-Private Declare Function RegCloseKey Lib "advapi32.dll" (ByVal hKey As Long) As Long
-Private Declare Function RegCreateKey Lib "advapi32.dll" Alias "RegCreateKeyA" (ByVal hKey As Long, ByVal lpSubKey As String, ByRef phkResult As Long) As Long
-Private Declare Function RegSetValueEx Lib "advapi32.dll" Alias "RegSetValueExA" (ByVal hKey As Long, ByVal lpValueName As String, ByVal Reserved As Long, ByVal dwType As Long, ByRef lpData As Any, ByVal cbData As Long) As Long
+#If Not WIN64 Then ' VB6 only
+    Public Declare Function RegOpenKey Lib "advapi32.dll" Alias "RegOpenKeyA" (ByVal hKey As Long, ByVal lpSubKey As String, ByRef phkResult As Long) As Long  ' hKey LongPtr, phkResult As LongPtr *
+    Public Declare Function RegQueryValueEx Lib "advapi32.dll" Alias "RegQueryValueExA" (ByVal hKey As Long, ByVal lpValueName As String, ByVal lpReserved As Long, ByRef lpType As Long, ByRef lpData As Any, ByRef lpcbData As Long) As Long ' hKey As LongPtr, lpReserved LongPtr *
+    Public Declare Function RegCloseKey Lib "advapi32.dll" (ByVal hKey As Long) As Long ' hKey LongPtr *
+    Public Declare Function RegCreateKey Lib "advapi32.dll" Alias "RegCreateKeyA" (ByVal hKey As Long, ByVal lpSubKey As String, ByRef phkResult As Long) As Long ' hKey LongPtr, phkResult LongPtr *
+    Public Declare Function RegSetValueEx Lib "advapi32.dll" Alias "RegSetValueExA" (ByVal hKey As Long, ByVal lpValueName As String, ByVal Reserved As Long, ByVal dwType As Long, ByRef lpData As Any, ByVal cbData As Long) As Long  ' hKey LongPtr *
+#End If
+
 '------------------------------------------------------ ENDS
 
 '------------------------------------------------------ STARTS
 ' APIs for useful functions START
-#If twinbasic Then
-    Public Declare Function ShellExecute Lib "Shell32.dll" Alias "ShellExecuteA" (ByVal hWnd As LongLong, ByVal lpOperation As String, ByVal lpFile As String, ByVal lpParameters As String, ByVal lpDirectory As String, ByVal nShowCmd As Long) As Long
-#Else
-    Public Declare Function ShellExecute Lib "Shell32.dll" Alias "ShellExecuteA" (ByVal hWnd As Long, ByVal lpOperation As String, ByVal lpFile As String, ByVal lpParameters As String, ByVal lpDirectory As String, ByVal nShowCmd As Long) As Long
+#If Not WIN64 Then ' VB6 only
+    Public Declare Function ShellExecute Lib "Shell32.dll" Alias "ShellExecuteA" (ByVal hWnd As Long, ByVal lpOperation As String, ByVal lpFile As String, ByVal lpParameters As String, ByVal lpDirectory As String, ByVal nShowCmd As Long) As Long  ' hWnd required as longPtr, returns longPtr *
 #End If
 ' APIs for useful functions END
 '------------------------------------------------------ ENDS
@@ -35,7 +36,9 @@ Private Declare Function RegSetValueEx Lib "advapi32.dll" Alias "RegSetValueExA"
 
 '------------------------------------------------------ STARTS
 ' API and enums for acquiring the special folder paths
-Private Declare Function SHGetFolderPath Lib "shfolder" Alias "SHGetFolderPathA" (ByVal hwndOwner As Long, ByVal nFolder As Long, ByVal hToken As Long, ByVal dwFlags As Long, ByVal pszPath As String) As Long
+#If Not WIN64 Then ' VB6 only
+    Private Declare Function SHGetFolderPath Lib "shfolder" Alias "SHGetFolderPathA" (ByVal hwndOwner As Long, ByVal nFolder As Long, ByVal hToken As Long, ByVal dwFlags As Long, ByVal pszPath As String) As Long '  1 hwnd required As LongPtr, 3 ByVal hToken As LongPtr ' *
+#End If
 
 Public Enum FolderEnum ' has to be public
     feCDBurnArea = 59 ' \Docs & Settings\User\Local Settings\Application Data\Microsoft\CD Burning
@@ -96,25 +99,30 @@ Private Type OFSTRUCT
     Reserved2 As Integer
     szPathName(OFS_MAXPATHNAME) As Byte
 End Type
-     
-Private Declare Function OpenFile Lib "kernel32" (ByVal lpFileName As String, _
-                            lpReOpenBuff As OFSTRUCT, ByVal wStyle As Long) As Long
-Private Declare Function PathFileExists Lib "shlwapi" Alias "PathFileExistsA" (ByVal pszPath As String) As Long
-Private Declare Function PathIsDirectory Lib "shlwapi" Alias "PathIsDirectoryA" (ByVal pszPath As String) As Long
+
+#If Not WIN64 Then ' VB6 only
+    Private Declare Function OpenFile Lib "kernel32" (ByVal lpFileName As String, _
+                                lpReOpenBuff As OFSTRUCT, ByVal wStyle As Long) As Long ' no longPtrs
+    Private Declare Function PathFileExists Lib "shlwapi" Alias "PathFileExistsA" (ByVal pszPath As String) As Long ' no longPtrs
+    Private Declare Function PathIsDirectory Lib "shlwapi" Alias "PathIsDirectoryA" (ByVal pszPath As String) As Long ' no longPtrs
+#End If
 '------------------------------------------------------ ENDS
 
 
 
 '------------------------------------------------------ STARTS
-'API Functions to read/write information from INI File
+'API Function to read/write information from INI File start
+
 Private Declare Function GetPrivateProfileString Lib "kernel32" _
     Alias "GetPrivateProfileStringA" (ByVal lpApplicationName As String, ByVal lpKeyName As Any _
     , ByVal lpDefault As String, ByVal lpReturnedString As String, ByVal nSize As Long _
-    , ByVal lpFileName As String) As Long
+    , ByVal lpFileName As String) As Long ' ANSI version has no longPtrs, Unicode does, ' UNICODE cparmLen will require a longptr*
 
 Private Declare Function WritePrivateProfileString Lib "kernel32" _
     Alias "WritePrivateProfileStringA" (ByVal lpApplicationName As String, ByVal lpKeyName As Any _
-    , ByVal lpString As Any, ByVal lpFileName As String) As Long
+    , ByVal lpString As Any, ByVal lpFileName As String) As Long ' ANSI version has no longPtrs, Unicode does ' UNICODE cparmLen will require a longptr*
+    
+'API Function to read/write information from INI File start
 '------------------------------------------------------ ENDS
 
 
@@ -132,15 +140,16 @@ Private m_sgsSettingsFile As String
 '---------------------------------------------------------------------------------------
 '
 Public Sub writeRegistry(ByRef hKey As Long, ByRef strPath As String, ByRef strvalue As String, ByRef strData As String)
-
-    Dim keyhand As Long: keyhand = 0
+    ' hKey required As LongPtr
+ 
+    Dim keyhand As Long: keyhand = 0 ' keyhand required As LongPtr
     Dim unusedReturnValue As Long: unusedReturnValue = 0
     
     On Error GoTo writeRegistry_Error
 
-    unusedReturnValue = RegCreateKey(hKey, strPath, keyhand)
-    unusedReturnValue = RegSetValueEx(keyhand, strvalue, 0, REG_SZ, ByVal strData, Len(strData))
-    unusedReturnValue = RegCloseKey(keyhand)
+    unusedReturnValue = RegCreateKey(hKey, strPath, keyhand)  ' hKey, keyhand required As LongPtr
+    unusedReturnValue = RegSetValueEx(keyhand, strvalue, 0, REG_SZ, ByVal strData, Len(strData)) ' keyhand required as longPtr
+    unusedReturnValue = RegCloseKey(keyhand) ' keyhand required As LongPtr
 
    On Error GoTo 0
    Exit Sub
@@ -157,10 +166,10 @@ End Sub
 ' Date      : 05/07/2019
 ' Purpose   :
 '---------------------------------------------------------------------------------------
-'
+' hKey required As LongPtr
 Public Function getstring(ByRef hKey As Long, ByRef strPath As String, ByRef strvalue As String) As String
 
-    Dim keyhand As Long: keyhand = 0
+    Dim keyhand As Long: keyhand = 0 ' required As LongPtr
     Dim lResult As Long: lResult = 0
     Dim strBuf As String: strBuf = vbNullString
     Dim lDataBufSize As Long: lDataBufSize = 0
@@ -171,10 +180,13 @@ Public Function getstring(ByRef hKey As Long, ByRef strPath As String, ByRef str
 
     On Error GoTo getstring_Error
 
+    ' hKey  required As LongPtr, keyhand  required As LongPtr
     rvar = RegOpenKey(hKey, strPath, keyhand)
+    ' keyhand  required As LongPtr, 3rd value 0& lpReserved 0& As LongPtr
     lResult = RegQueryValueEx(keyhand, strvalue, 0&, lValueType, ByVal 0&, lDataBufSize)
     If lValueType = REG_SZ Then
         strBuf = String$(lDataBufSize, " ")
+        ' keyhand  required As LongPtr, 3rd value 0& phkResult required As LongPtr
         lResult = RegQueryValueEx(keyhand, strvalue, 0&, 0&, ByVal strBuf, lDataBufSize)
         Dim ERROR_SUCCESS As Variant
         If lResult = ERROR_SUCCESS Then
@@ -409,6 +421,8 @@ Public Function fSpecialFolder(ByVal pfe As FolderEnum) As String
     On Error GoTo fSpecialFolder_Error
 
     strBuffer = Space$(MAX_PATH)
+    
+    '  1 hwnd required As LongPtr, 3 ByVal hToken As LongPtr
     If SHGetFolderPath(0, pfe, 0, 0, strBuffer) = 0 Then strPath = Left$(strBuffer, InStr(strBuffer, vbNullChar) - 1)
     If Right$(strPath, 1) = "\" Then strPath = Left$(strPath, Len(strPath) - 1)
     fSpecialFolder = strPath

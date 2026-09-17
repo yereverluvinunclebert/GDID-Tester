@@ -16,6 +16,8 @@ o Save
 o Remove the ocx slider from the form using TB's form designer
 o In Project References select packages, add Krools VBCCR18 package, common controls replacement
 o Add a new slider in place of the other removed, with the same name.
+o search for all occurrences of "required as longPtr", add the conditional compiler statements to use longPtr rather than a Long
+o Add WinDevLib package to the program.
 o Change the target to win64, save, compile, it should then work.
 
 The GDIDTester cannot be converted fully to TB unless I can import a file into TB or export as I require. Also, cannot use source control whilst within a twinProj.
