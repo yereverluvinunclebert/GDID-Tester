@@ -946,13 +946,14 @@ Private Sub sliGDIDInterval_Change()
     tmrGDIDTester.Interval = sliGDIDInterval.Value * 1000
     
     If sliGDIDInterval.Value <= 0 Then
-        'tmrGDIDTester.Enabled = False
+        tmrGDIDTester.Enabled = False
         btnTicks.Visible = False
         tmrTicker.Enabled = False
         chkRegularTesting.Value = 0
     Else
         chkRegularTesting.Value = 1
-        'tmrGDIDTester.Enabled = True
+        tmrGDIDTester.Enabled = False
+        tmrGDIDTester.Enabled = True
     End If
     
     If fFExists(gsSettingsFile) Then
