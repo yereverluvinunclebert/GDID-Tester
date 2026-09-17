@@ -344,8 +344,9 @@ Private Sub Form_Load()
     Call readSettingsFile("Software\GDIDTester", gsSettingsFile)
     
     ' open the log and touch it.
+    Call writeLogFile(" ")
     Call writeLogFile("Starting GDIDTester ", Now())
-    
+
     ' validate and set any missing inputs
     Call validateInputs
     
@@ -801,8 +802,8 @@ Private Sub setFirstRunStatus()
     On Error GoTo setFirstRunStatus_Error
 
     If gbFirstTimeRun = True Then
-
         gsOriginalGDID = GDID
+        
         gbFirstTimeRun = False
         
         ' save the first time run state AND the original GDID
@@ -811,9 +812,13 @@ Private Sub setFirstRunStatus()
             sPutINISetting "Software\GDIDTester", "OriginalGDID", gsOriginalGDID, gsSettingsFile
         End If
         
-        Call writeLogFile("The Original GDID of your system was - " & GDID, Now())
-    End If
+        Call writeLogFile("The Original GDID found and stored on first run - " & gsOriginalGDID, Now())
+    Else
     
+        Call writeLogFile("The original GDID Key Value as stored " & gsOriginalGDID) ' read from the registry.
+
+    End If
+
     On Error GoTo 0
     Exit Sub
 
@@ -1030,26 +1035,22 @@ Private Sub testGDID()
                 Else
                     Call writeLogFile("GDID auto-generated " & GDID, CStr(nowValue))
                 End If
-                    
+                
+                Call writeCombo(nowValue)
+                
                 If chkAlertMsgBox.Value = 1 Then MsgBox "GDID has been auto-generated"
-
+                Call writeLogFile("Changed from - " & oldRegValue)
             End If
         Else
 
-            If cmbDateTime.Text = "none found" Then
-                cmbDateTime.RemoveItem 0
-                cmbDateTime.AddItem CStr(nowValue), 0
-            Else
-                cmbDateTime.AddItem CStr(nowValue)
-            End If
-            
-            cmbDateTime.Text = CStr(nowValue)
+            Call writeCombo(nowValue)
             Call writeLogFile("GDID Changed " & GDID, CStr(nowValue))
             
             If chkAlertMsgBox.Value = 1 Then MsgBox "GDID has been changed"
-                    
+            Call writeLogFile("Changed from - " & oldRegValue)
         End If
         
+
         gbStartupFlg = False
                 
     End If
@@ -1062,6 +1063,33 @@ testGDID_Error:
      MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure testGDID of Form Form1"
 End Sub
 
+'---------------------------------------------------------------------------------------
+' Procedure : writeCombo
+' Author    : beededea
+' Date      : 17/09/2026
+' Purpose   :
+'---------------------------------------------------------------------------------------
+'
+Private Sub writeCombo(ByVal thisTime As Date)
+
+    On Error GoTo writeCombo_Error
+
+    If cmbDateTime.Text = "none found" Then
+        cmbDateTime.RemoveItem 0
+        cmbDateTime.AddItem CStr(thisTime), 0
+    Else
+        cmbDateTime.AddItem CStr(thisTime)
+    End If
+
+    cmbDateTime.Text = CStr(thisTime)
+                        
+    On Error GoTo 0
+    Exit Sub
+
+writeCombo_Error:
+
+     MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure writeCombo of Form Form1"
+End Sub
 '---------------------------------------------------------------------------------------
 ' Procedure : readSettingsFile
 ' Author    : beededea
@@ -1115,8 +1143,8 @@ Private Sub setTooltips()
 
     On Error GoTo setTooltips_Error
 
-    txtRegistryValue.ToolTipText = "This field shows any GDID that is inserted into the registry key."
-    cmbDateTime.ToolTipText = "This drop down list shows a new date and time recording when the GDID was last changed."
+    txtRegistryValue.ToolTipText = "This field shows any GDID that is inserted into the registry key, either by this tool or externally by Microsoft."
+    cmbDateTime.ToolTipText = "This drop down list shows a date and time recording when the GDID was last changed since startup"
     chkAlertMsgBox.ToolTipText = "This check box will enable a pop-up message box to appear in the centre of the screen when a GDID is found."
     chkRegularTesting.ToolTipText = "This check box will enable the regular testing timer."
     btnClear.ToolTipText = "This button will clear any stored dates/times."

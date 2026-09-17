@@ -1,6 +1,6 @@
 For conversion to 64 bit.
 
-The issues are:
+The conversion issues are:
 
 o The Krool slider.OCX is 32bit and therefore cannot work in conjunction with 64bit TB nor does it work with the potential TB fusion integration.
 o The manifest required for the VB6 program to access the OCX refers to x86 architecture, incompatible with 64bit.
@@ -17,3 +17,8 @@ o Remove the ocx slider from the form using TB's form designer
 o In Project References select packages, add Krools VBCCR18 package, common controls replacement
 o Add a new slider in place of the other removed, with the same name.
 o Change the target to win64, save, compile, it should then work.
+
+The GDIDTester cannot be converted fully to TB unless I can import a file into TB or export as I require. Also, cannot use source control whilst within a twinProj.
+So, waiting until 1.0.
+
+
