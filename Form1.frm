@@ -434,6 +434,7 @@ Private Sub btnGenerate_Click()
 
     On Error GoTo btnGenerate_Click_Error
     
+    Call writeLogFile("Generated a GDID manually ", Now())
     Call generateGDID(False)
         
     On Error GoTo 0
@@ -508,6 +509,8 @@ End Sub
 Private Sub btnRemoveRegValue_Click()
     On Error GoTo btnRemoveRegValue_Click_Error
     
+    Call writeLogFile("Removed the GDID manually ", Now())
+    
     Call readRegistryValue
     
     If txtRegistryValue.Text = "" Then
@@ -548,6 +551,8 @@ Private Sub chkAutomaticGeneration_Click()
         chkRegularTesting.Value = 1
     End If
 
+    If gbStartupFlg = False Then Call writeLogFile("Changing the Automatic Generation status manually " & gsAutomaticGeneration, Now())
+
     On Error GoTo 0
     Exit Sub
 
@@ -579,6 +584,8 @@ Private Sub chkWindowsStartup_Click()
         Call writeRegistry(HKEY_CURRENT_USER, "SOFTWARE\Microsoft\Windows\CurrentVersion\Run", "GDIDTester", vbNullString)
     End If
     
+    If gbStartupFlg = False Then Call writeLogFile("Changing the Windows Startup status manually " & gsWindowsStartup, Now())
+    
     On Error GoTo 0
     Exit Sub
 
@@ -603,6 +610,8 @@ Private Sub chkAlertMsgBox_Click()
     If fFExists(gsSettingsFile) Then
         sPutINISetting "Software\GDIDTester", "AlertMsgBox", gsAlertMsgBox, gsSettingsFile
     End If
+    
+    If gbStartupFlg = False Then Call writeLogFile("Changing the Auto Alert status manually to " & gsAlertMsgBox, Now())
     
     On Error GoTo 0
     Exit Sub
@@ -632,6 +641,8 @@ Private Sub chkAutomaticRemoval_Click()
     If chkAutomaticRemoval.Value = 1 Then chkRegularTesting.Value = 1
     If chkAutomaticRemoval.Value = 1 Then chkAutomaticGeneration.Value = 0
     
+    If gbStartupFlg = False Then Call writeLogFile("Changing the Automatic Removal status manually " & gsAutomaticRemoval, Now())
+   
     On Error GoTo 0
     Exit Sub
 
@@ -650,7 +661,7 @@ End Sub
 Private Sub chkRegularTesting_Click()
 
     On Error GoTo chkRegularTesting_Click_Error
-        
+    
     tmrGDIDTester.Enabled = chkRegularTesting.Value
     
     If gbStartupFlg = True Then Exit Sub
@@ -669,6 +680,8 @@ Private Sub chkRegularTesting_Click()
     End If
 
     lblMilliseconds.Caption = tmrGDIDTester.Interval & " milliseconds, running = " & tmrGDIDTester.Enabled
+    
+    If gbStartupFlg = False Then Call writeLogFile("Changing the Regular Testing status manually " & gsRegularTesting, Now())
 
     On Error GoTo 0
     Exit Sub
@@ -964,6 +977,7 @@ Private Sub sliGDIDInterval_Change()
     
     lblMilliseconds.Caption = tmrGDIDTester.Interval & " milliseconds, running = " & tmrGDIDTester.Enabled
     
+    If gbStartupFlg = False Then Call writeLogFile("Changed the testing interval manually " & gsGDIDInterval, Now())
 
     On Error GoTo 0
     Exit Sub
