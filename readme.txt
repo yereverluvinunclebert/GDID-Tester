@@ -24,3 +24,16 @@ The GDIDTester cannot be converted fully to TB unless I can import a file into T
 So, waiting until 1.0.
 
 
+Computer\HKEY_CURRENT_USER\SOFTWARE\Microsoft\IdentityCRL\Immersive\production\Token\
+Loop through all the keys there eg.
+
+{12E984BD-5803-4D78-9EFB-BED7B9212C26}
+
+extract the DeviceId, match it with the known original GDID and see which match.
+Change the DeviceID to match the new generated GDID
+
+Computer\HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\IdentityCRL\NegativeCache
+Loop through all the keys there eg.
+extract the first 16 chars of the key name, match it with the known original GDID and see which match.
+0018C013A05744F3_S-1-5-21-732211230-4157827500-48361523-1001
+If found, change the DeviceID to match the new generated GDID

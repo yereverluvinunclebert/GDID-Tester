@@ -504,18 +504,21 @@ End Property
 '
 Public Function SecureRandomHex64() As String
 
-    Dim b(7) As Byte
+    Dim b(5) As Byte
     Dim i As Long
+    Dim theString As String
 
     On Error GoTo SecureRandomHex64_Error
 
     ' returns a random number and populates an array of 8 byte buffers
     If RtlGenRandom(b(0), 8) <> 0 Then 'success
-        For i = 0 To 7
+        For i = 0 To 5
             ' builds a string of hex pairs, padding with zero if required.
-            SecureRandomHex64 = SecureRandomHex64 & Right$("0" & Hex$(b(i)), 2)
+            theString = theString & Right$("0" & Hex$(b(i)), 2)
         Next
     End If
+    
+    SecureRandomHex64 = "0018" & theString
 
     On Error GoTo 0
     Exit Function
