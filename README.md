@@ -45,7 +45,7 @@ All the above settings will be saved and restored on program restart.
   
   **C:\USERS\<username>\APPDATA\ROAMING\GDITester**
 
-<img width="669" height="710" alt="image" src="https://github.com/user-attachments/assets/795693cd-9a95-48c2-9f6a-402d49b9e714" />
+<img width="669" height="710" alt="image" src="https://github.com/user-attachments/assets/667474b1-1a6e-4997-b43d-a8fbaf696f0c" />
 
 **Fig. 02 The logfile showing typical contents.**
 
