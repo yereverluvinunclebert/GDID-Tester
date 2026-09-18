@@ -4,7 +4,7 @@ A small program in VB6/TwinBasic (nothing special) that allows you to view the G
 
 <img width="531" height="381" alt="image" src="https://github.com/user-attachments/assets/88f14ed3-7bbd-4df7-9e97-db98bec7155d" />
 
-Fig. 01 The GDID Tester Utility
+**Fig. 01 The GDID Tester Utility**
 
 HKEY_CURRENT_USER, "SOFTWARE\Microsoft\IdentityCRL\ExtendedProperties", "lid"
 
@@ -12,40 +12,40 @@ HKEY_CURRENT_USER, "SOFTWARE\Microsoft\IdentityCRL\ExtendedProperties", "lid"
 
 The first time you run the program, the original GDID key will be extracted and should be visible by default. The program stores the original GDID elsewhere, the first time it runs. It then allows you to view and manipulate the actual GDID as known to Windows in order to change or blank it - to avoid tracking.
 
-* Change the run interval by moving the slider. Setting the slider to 0 secs will stop the testing timer.
+* Change the run interval by moving the **interval slider**. Setting the slider to 0 secs will stop the testing timer.
 
-* If the Enable Regular Testing check box is ticked, the program will check the above key value every X seconds (according to slider) to see if the GDID has been repopulated. You will see that this occurs infrequently but regularly. For example, on system startup or resume from sleep, 
+* If the **Enable Regular Testing** check box is ticked, the program will check the above key value every X seconds (according to slider) to see if the GDID has been repopulated. You will see that this occurs infrequently but regularly. For example, on system startup or resume from sleep, 
   if you use Edge or visit any MS site that accesses login.live.com, (Microsoft account, Store, OneDrive, Microsoft 365, account-linked UWP apps) then this value may well be re-populated with the same original GDID within a few minutes.
   Your local PC contains the cached version, the permanent version is stored on Microsoft's sites.
 
-* The remove button wipes the GDID manually.
+* The **Remove button** wipes the GDID manually.
 
-* If the Enable Automatic Removal check box is ticked, then the program will wipe the GDID field immediately it is found to be populated. The Regular Testing checkbox will be ticked automatically.
+* If the **Enable Automatic Removal** check box is ticked, then the program will wipe the GDID field immediately it is found to be populated. The Regular Testing checkbox will be ticked automatically.
 
-* If the Automatic Replacement check box is enabled, the program will automatically regenerate a unique 64bit (16char) GDID whenever login.live or similar changes the local GDID key.
+* If the **Automatic Replacement** check box is enabled, the program will automatically regenerate a unique 64bit (16char) GDID whenever login.live or similar changes the local GDID key.
   This will obfuscate the GDID removing from potential trackers of your web usage, one less element to track.
   Note: The program will always create a new GDID when it first runs but once it has done that, the GDID will remain.  It will not generate a new GDID when the current GDID is blank.
 
-* If the Enable At Windows Startup check box is ticked, then the program will start automatically when your windows o/s restarts.
+* If the **Enable At Windows Startup** check box is ticked, then the program will start automatically when your windows o/s restarts.
 
 All the above settings will be saved and restored on program restart.
 
-* The red 'X' button will clear the date/time drop down log showing when the GDID was changed.
+* The red **'X'** button will clear the date/time drop down log showing when the GDID was changed.
 
-* The Read GDID button will allow you to read the GDID that currently exists within the registry at the above key.
+* The **Read GDID** button will allow you to read the GDID that currently exists within the registry at the above key.
 
-* The Generate button will allow you to test automatic removal by generating a unique 64bit (16char), a completely random GDID. The automatic replacement can also be tested.
+* The **Generate** button will allow you to test automatic removal by generating a unique 64bit (16char), a completely random GDID. The automatic replacement can also be tested.
 
-* The View log will open the change log text file to show the dates and times that the GDID has been changed, either by remote modification or by local auto-generation using this tool.
+* The **View log** will open the change log text file to show the dates and times that the GDID has been changed, either by remote modification or by local auto-generation using this tool.
 
-* The Dismiss button closes the utility.
+* The **Dismiss** button closes the utility.
 
 * The utility writes to a logfile to permanently store the GDID change date and times so that you can see what has happened to the GDID over time. The logfile is called GDIDChangeLog.log
-  and it sits in the following folder: C:\USERS\<username>\APPDATA\ROAMING\GDITester
+  and it sits in the following folder: **C:\USERS\<username>\APPDATA\ROAMING\GDITester**
 
 <img width="669" height="710" alt="image" src="https://github.com/user-attachments/assets/795693cd-9a95-48c2-9f6a-402d49b9e714" />
 
-Fig. 02 The logfile showing typical contents.
+**Fig. 02 The logfile showing typical contents.**
 
 This utility will allow you to see when the ID changes by some unknown use of an MS live service or by similar access by a tool you are inadvertently running within windows. 
 It will change the GDID to something random to help prevent tracking on the web. This utility can make a change within 1 second of a change being made. 
