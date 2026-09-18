@@ -41,6 +41,8 @@ All the above settings will be saved and restored on program restart.
 * The utility writes to a logfile to permanently store the GDID change date and times so that you can see what has happened to the GDID over time. The logfile is called GDIDChangeLog.log
   and it sits in the following folder: C:\USERS\<username>\APPDATA\ROAMING\GDITester
 
+<img width="669" height="710" alt="image" src="https://github.com/user-attachments/assets/795693cd-9a95-48c2-9f6a-402d49b9e714" />
+
 This utility will allow you to see when the ID changes by some unknown use of an MS live service or by similar access by a tool you are inadvertently running within windows. 
 It will change the GDID to something random to help prevent tracking on the web. This utility can make a change within 1 second of a change being made. 
 
