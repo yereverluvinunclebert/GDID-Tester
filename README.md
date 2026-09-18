@@ -3,6 +3,7 @@
 A small program in VB6/TwinBasic (nothing special) that allows you to view the GDID value and remove it if you want to stymie a point of tracking by MicroSoft. The program is very slimline, it is 32bit but there is a twinproj file in the source that you can use to compile to 64bits using TwinBasic. Note that the TwinBasic version will lag behind the VB6 version as the VB6 code is the 'master'.
 
 <img width="531" height="381" alt="image" src="https://github.com/user-attachments/assets/88f14ed3-7bbd-4df7-9e97-db98bec7155d" />
+
 Fig. 01 The GDID Tester Utility
 
 HKEY_CURRENT_USER, "SOFTWARE\Microsoft\IdentityCRL\ExtendedProperties", "lid"
@@ -43,6 +44,7 @@ All the above settings will be saved and restored on program restart.
   and it sits in the following folder: C:\USERS\<username>\APPDATA\ROAMING\GDITester
 
 <img width="669" height="710" alt="image" src="https://github.com/user-attachments/assets/795693cd-9a95-48c2-9f6a-402d49b9e714" />
+
 Fig. 02 The logfile showing typical contents.
 
 This utility will allow you to see when the ID changes by some unknown use of an MS live service or by similar access by a tool you are inadvertently running within windows. 
