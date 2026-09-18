@@ -23,6 +23,7 @@ o Change the target to win64, save, compile, it should then work.
 The GDIDTester cannot be converted fully to TB unless I can import a file into TB or export as I require. Also, cannot use source control whilst within a twinProj.
 So, waiting until 1.0.
 
+Tasks:
 
 Computer\HKEY_CURRENT_USER\SOFTWARE\Microsoft\IdentityCRL\Immersive\production\Token\
 Loop through all the keys there eg.
