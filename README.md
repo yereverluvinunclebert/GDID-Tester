@@ -45,6 +45,8 @@ This utility will allow you to see when the ID changes by some unknown use of an
 It will change the GDID to something random to help prevent tracking on the web. This utility can make a change within 1 second of a change being made. 
 
 Please be aware that changing the GDID you may block access to Windows 'apps' available from the Windows store and may prevent access to any Microsoft supplied services via the login.live service.
+If you are a Windows desktop user and do not use the old mobile-type apps, nor do you use the Windows store and Onedrive that require a Microsoft login, then this limitation will not affect you. Personally, I use Windows 10 and 
+traditional desktop applications, Dropbox for storage and a local login. I do not use a Microsoft login, nor do I intend to. I do not want to be tracked.
 
 Once the GDID has been obfuscated, to prevent further moodification of the GDID you could also run a tool such as ["Windows Firewall Notifier"](https://github.com/wokhan/WFN) that can be configured to prevent any unwanted changes to the GDID by preventing login.live.com access to your computer.
 
