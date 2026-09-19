@@ -56,7 +56,7 @@ Please be aware that changing the GDID you may block access to Windows 'apps' av
 If you are a Windows desktop user and do not use the old mobile-type apps, nor do you use the Windows store and Onedrive that require a Microsoft login, then this limitation will not affect you. Personally, I use Windows 10 and 
 traditional desktop applications, Dropbox for storage and a local login. I do not use a Microsoft login, nor do I intend to. I do not want to be tracked.
 
-Once the GDID has been obfuscated, to prevent further moodification of the GDID you could also run a tool such as ["Windows Firewall Notifier"](https://github.com/wokhan/WFN) that can be configured to prevent any unwanted changes to the GDID by preventing login.live.com access to your computer.
+Once the GDID has been obfuscated, to prevent further modification of the GDID you could also run a tool such as ["Windows Firewall Notifier"](https://github.com/wokhan/WFN) that can be configured to prevent any unwanted changes to the GDID by preventing login.live.com access to your computer.
 
 For more information on the GDID tracking key visit this link : https://www.it-connect.tech/windows-gdid-impossible-to-delete-but-you-can-block-it/
 
@@ -64,16 +64,20 @@ Later changes to come:
 
 * Complete variable changes to make it fully 64bit 
 * Use the API to test the GDID key instead of a timer.
-* Computer\HKEY_CURRENT_USER\SOFTWARE\Microsoft\IdentityCRL\Immersive\production\Token\
-Loop through all the keys there eg.
+* Phase II - deal with the GDID within the following set of keys:
+  Computer\HKEY_CURRENT_USER\SOFTWARE\Microsoft\IdentityCRL\Immersive\production\Token\
+  Loop through all the keys there eg.
 
-{12E984BD-5803-4D78-9EFB-BED7B9212C26}
+   {12E984BD-5803-4D78-9EFB-BED7B9212C26}
 
-extract the DeviceId, match it with the known original GDID and see which match.
-Change the DeviceID to match the new generated GDID
+  extract the DeviceId, match it with the known original GDID and see which match.
+  Change the DeviceID to match the new generated GDID
 
-* Computer\HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\IdentityCRL\NegativeCache
-Loop through all the keys there eg.
-extract the first 16 chars of the key name, match it with the known original GDID and see which match.
-0018C013A05744F3_S-1-5-21-732211230-4157827500-48361523-1001
-If found, change the DeviceID to match the new generated GDID
+* Phase III - deal with the GDID values within the following set of keys:
+  Computer\HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\IdentityCRL\NegativeCache
+  Loop through all the keys there eg.
+
+  0018C013A05744F3_S-1-5-21-732211230-4157827500-48361523-1001
+  
+  extract the first 16 chars of the key name, match it with the known original GDID and see which match.
+  If found, change the keyname to match the new generated GDID
