@@ -64,7 +64,7 @@ Later changes to come:
 
 * Complete variable changes to make it fully 64bit 
 * Use the API to test the GDID key instead of a timer.
-* Phase II - deal with the GDID within the following set of keys:
+* Phase II - WIP - deal with the GDID contained within the following set of keys:
   Computer\HKEY_CURRENT_USER\SOFTWARE\Microsoft\IdentityCRL\Immersive\production\Token\
   Loop through all the keys there eg.
 
