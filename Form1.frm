@@ -342,7 +342,7 @@ Private Sub Form_Load()
     ' validate and set any missing inputs
     Call validateInputs
     
-    ' adjust all the preference controls
+    ' adjust all the controls
     Call adjustControls
     
     ' set the tooltips
@@ -351,11 +351,13 @@ Private Sub Form_Load()
     ' read the GDID registry values
     Call readRegistryValue
     
-    gbStartupFlg = True
+    ' always test the GDID value on startup regardless of the testing timer status
     Call testGDID
     
     ' check the first time run status
     Call setFirstRunStatus
+    
+    ' the main timer is started in chkRegularTesting_Click() in adjustControls
     
     On Error GoTo 0
     Exit Sub
@@ -482,6 +484,8 @@ Private Sub btnReadRegistry_Click()
     Call testGDID
     If GDID = "" Then
         MsgBox "No GDID found in the registry"
+    Else
+        MsgBox "GDID found in the registry " & GDID
     End If
     On Error GoTo 0
     Exit Sub
@@ -965,9 +969,11 @@ Private Sub sliGDIDInterval_Change()
         tmrTicker.Enabled = False
         chkRegularTesting.Value = 0
     Else
-        chkRegularTesting.Value = 1
-        tmrGDIDTester.Enabled = False
-        tmrGDIDTester.Enabled = True
+        If gsRegularTesting = "1" Then
+            chkRegularTesting.Value = 1
+            tmrGDIDTester.Enabled = False
+            tmrGDIDTester.Enabled = True
+        End If
     End If
     
     If fFExists(gsSettingsFile) Then
@@ -1054,7 +1060,9 @@ Private Sub testGDID()
                 
                 Call writeCombo(nowValue)
                 
-                If chkAlertMsgBox.Value = 1 Then MsgBox "GDID has been auto-generated"
+                If gbStartupFlg = False Then
+                    If chkAlertMsgBox.Value = 1 Then MsgBox "GDID has been auto-generated"
+                End If
                 Call writeLogFile("Changed from - " & oldRegValue)
             End If
         Else
@@ -1062,7 +1070,9 @@ Private Sub testGDID()
             Call writeCombo(nowValue)
             Call writeLogFile("GDID Changed " & GDID, CStr(nowValue))
             
-            If chkAlertMsgBox.Value = 1 Then MsgBox "GDID has been changed"
+            If chkAlertMsgBox.Value = 1 Then
+                If gbStartupFlg = False Then MsgBox "GDID has been changed"
+            End If
             Call writeLogFile("Changed from - " & oldRegValue)
         End If
         
