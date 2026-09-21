@@ -22,7 +22,7 @@ Begin VB.Form Form1
    Begin CCRSlider.Slider sliGDIDInterval 
       Height          =   405
       Left            =   180
-      TabIndex        =   22
+      TabIndex        =   21
       Top             =   2250
       Width           =   4755
       _ExtentX        =   8387
@@ -35,7 +35,7 @@ Begin VB.Form Form1
       Left            =   5820
       Picture         =   "Form1.frx":10CA
       Style           =   1  'Graphical
-      TabIndex        =   21
+      TabIndex        =   20
       Top             =   2250
       Width           =   405
    End
@@ -43,7 +43,7 @@ Begin VB.Form Form1
       Caption         =   "View log"
       Height          =   435
       Left            =   6210
-      TabIndex        =   20
+      TabIndex        =   19
       Top             =   4230
       Width           =   1515
    End
@@ -51,7 +51,7 @@ Begin VB.Form Form1
       Height          =   345
       Left            =   2340
       Locked          =   -1  'True
-      TabIndex        =   19
+      TabIndex        =   18
       Text            =   "Original GDID"
       Top             =   180
       Width           =   2295
@@ -60,7 +60,7 @@ Begin VB.Form Form1
       Caption         =   "Enable Automatic Replacement of GDID"
       Height          =   405
       Left            =   330
-      TabIndex        =   17
+      TabIndex        =   16
       Top             =   4410
       Width           =   3285
    End
@@ -68,7 +68,7 @@ Begin VB.Form Form1
       Caption         =   "Enable at Windows Startup"
       Height          =   255
       Left            =   330
-      TabIndex        =   16
+      TabIndex        =   15
       Top             =   4860
       Width           =   2535
    End
@@ -77,7 +77,7 @@ Begin VB.Form Form1
       Left            =   7440
       Picture         =   "Form1.frx":1543
       Style           =   1  'Graphical
-      TabIndex        =   15
+      TabIndex        =   14
       Top             =   720
       Width           =   285
    End
@@ -85,7 +85,7 @@ Begin VB.Form Form1
       Caption         =   "Generate"
       Height          =   405
       Left            =   6210
-      TabIndex        =   14
+      TabIndex        =   13
       Top             =   3780
       Width           =   1515
    End
@@ -93,7 +93,7 @@ Begin VB.Form Form1
       Caption         =   "Enable Automatic Removal (blanking)"
       Height          =   405
       Left            =   330
-      TabIndex        =   12
+      TabIndex        =   11
       Top             =   4020
       Width           =   3345
    End
@@ -101,7 +101,7 @@ Begin VB.Form Form1
       Caption         =   "Enable Regular Testing"
       Height          =   405
       Left            =   330
-      TabIndex        =   11
+      TabIndex        =   10
       Top             =   3240
       Width           =   2535
    End
@@ -109,7 +109,7 @@ Begin VB.Form Form1
       Caption         =   "Enable Automatic Alert pop-up when found"
       Height          =   405
       Left            =   330
-      TabIndex        =   9
+      TabIndex        =   8
       Top             =   3630
       Width           =   3675
    End
@@ -117,7 +117,7 @@ Begin VB.Form Form1
       Caption         =   "Read GDID"
       Height          =   405
       Left            =   6210
-      TabIndex        =   5
+      TabIndex        =   4
       Top             =   2820
       Width           =   1515
    End
@@ -158,7 +158,7 @@ Begin VB.Form Form1
       Left            =   5130
       List            =   "Form1.frx":1777
       Locked          =   -1  'True
-      TabIndex        =   13
+      TabIndex        =   12
       Text            =   "none found"
       Top             =   720
       Width           =   2235
@@ -167,7 +167,7 @@ Begin VB.Form Form1
       Caption         =   "10 secs"
       Height          =   255
       Left            =   4410
-      TabIndex        =   24
+      TabIndex        =   23
       Top             =   2880
       Width           =   645
    End
@@ -175,7 +175,7 @@ Begin VB.Form Form1
       Caption         =   "0 sec"
       Height          =   255
       Left            =   330
-      TabIndex        =   23
+      TabIndex        =   22
       Top             =   2880
       Width           =   435
    End
@@ -183,7 +183,7 @@ Begin VB.Form Form1
       Caption         =   "Original Key Value (GDID)"
       Height          =   435
       Left            =   300
-      TabIndex        =   18
+      TabIndex        =   17
       Top             =   240
       Width           =   1995
    End
@@ -191,7 +191,7 @@ Begin VB.Form Form1
       Caption         =   "Timer interval "
       Height          =   435
       Left            =   1350
-      TabIndex        =   10
+      TabIndex        =   9
       Top             =   2880
       Width           =   2625
    End
@@ -199,7 +199,7 @@ Begin VB.Form Form1
       Caption         =   "Time"
       Height          =   285
       Left            =   4680
-      TabIndex        =   8
+      TabIndex        =   7
       Top             =   780
       Width           =   975
    End
@@ -209,7 +209,7 @@ Begin VB.Form Form1
       Height          =   375
       Left            =   5220
       MousePointer    =   1  'Arrow
-      TabIndex        =   7
+      TabIndex        =   6
       Top             =   240
       Width           =   1545
    End
@@ -217,25 +217,17 @@ Begin VB.Form Form1
       Caption         =   $"Form1.frx":1787
       Height          =   645
       Left            =   300
-      TabIndex        =   6
-      Top             =   1650
+      TabIndex        =   5
+      Top             =   1260
       Width           =   6645
    End
    Begin VB.Label lblKey 
       Caption         =   "Current Key Value"
       Height          =   435
       Left            =   300
-      TabIndex        =   4
+      TabIndex        =   3
       Top             =   750
       Width           =   1305
-   End
-   Begin VB.Label txtGDID 
-      Caption         =   "HKEY_CURRENT_USER, ""SOFTWARE\Microsoft\IdentityCRL\ExtendedProperties"", ""lid"""
-      Height          =   465
-      Left            =   300
-      TabIndex        =   3
-      Top             =   1260
-      Width           =   6705
    End
 End
 Attribute VB_Name = "Form1"
@@ -814,8 +806,10 @@ End Sub
 '
 Private Sub setFirstRunStatus()
 
-    On Error GoTo setFirstRunStatus_Error
+    Dim encryptedString As String: encryptedString = vbNullString
 
+    On Error GoTo setFirstRunStatus_Error
+        
     If gbFirstTimeRun = True Then
         gsOriginalGDID = GDID
         
@@ -824,7 +818,12 @@ Private Sub setFirstRunStatus()
         ' save the first time run state AND the original GDID
         If fFExists(gsSettingsFile) Then
             sPutINISetting "Software\GDIDTester", "FirstTimeRun", gbFirstTimeRun, gsSettingsFile
-            sPutINISetting "Software\GDIDTester", "OriginalGDID", gsOriginalGDID, gsSettingsFile
+            
+            encryptedString = encryptstr(gsOriginalGDID)
+            sPutINISetting "Software\GDIDTester", "OriginalGDID", encryptedString, gsSettingsFile
+            
+            'sPutINISetting "Software\GDIDTester", "OriginalGDID", gsOriginalGDID, gsSettingsFile
+
         End If
         
         Call writeLogFile("The Original GDID found and stored on first run - " & gsOriginalGDID, Now())
@@ -1116,8 +1115,9 @@ End Sub
 '
 Public Sub readSettingsFile(ByVal Location As String, ByVal gsSettingsFile As String)
     
-    Dim boolCheck As String
-        
+    Dim boolCheck As String: boolCheck = vbNullString
+    Dim encryptedString As String: encryptedString = vbNullString
+    
     On Error GoTo readSettingsFile_Error
 
     If fFExists(gsSettingsFile) Then
@@ -1128,8 +1128,10 @@ Public Sub readSettingsFile(ByVal Location As String, ByVal gsSettingsFile As St
         ' general
         gbFirstTimeRun = CBool(boolCheck)
         gsWindowsStartup = fGetINISetting(Location, "WindowsStartup", gsSettingsFile)
-        gsOriginalGDID = fGetINISetting(Location, "OriginalGDID", gsSettingsFile)
         
+        encryptedString = fGetINISetting(Location, "OriginalGDID", gsSettingsFile)
+        gsOriginalGDID = decryptstr(encryptedString)
+
         ' configuration
         gsAlertMsgBox = fGetINISetting(Location, "AlertMsgBox", gsSettingsFile)
         gsRegularTesting = fGetINISetting(Location, "RegularTesting", gsSettingsFile)
@@ -1161,7 +1163,7 @@ Private Sub setTooltips()
     On Error GoTo setTooltips_Error
 
     txtRegistryValue.ToolTipText = "This field shows any GDID that is inserted into the registry key, either by this tool or externally by Microsoft."
-    cmbDateTime.ToolTipText = "This drop down list shows a date and time recording when the GDID was last changed since startup"
+    cmbDateTime.ToolTipText = "This drop down list shows a date and time recording when the GDID was last changed since startup, for more detail view the logfile."
     chkAlertMsgBox.ToolTipText = "This check box will enable a pop-up message box to appear in the centre of the screen when a GDID is found."
     chkRegularTesting.ToolTipText = "This check box will enable the regular testing timer."
     btnClear.ToolTipText = "This button will clear any stored dates/times."

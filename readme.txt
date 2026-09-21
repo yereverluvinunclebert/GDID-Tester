@@ -1,4 +1,4 @@
-For conversion to 64 bit.
+o  conversion to 64 bit.
 
 The conversion issues are:
 
@@ -25,6 +25,8 @@ So, waiting until 1.0.
 
 Tasks:
 
+o Use the API to test the GDID key instead of a timer.
+
 Computer\HKEY_CURRENT_USER\SOFTWARE\Microsoft\IdentityCRL\Immersive\production\Token\
 Loop through all the keys there eg.
 
@@ -38,3 +40,9 @@ Loop through all the keys there eg.
 extract the first 16 chars of the key name, match it with the known original GDID and see which match.
 0018C013A05744F3_S-1-5-21-732211230-4157827500-48361523-1001
 If found, change the DeviceID to match the new generated GDID
+stop the service
+
+To stop the Connected Devices Platform User Service
+HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\
+Look for the service keys named CDPUserSvc and any corresponding split keys with alphanumeric suffixes such as CDPUserSvc_xxxx
+4 = Disabled
