@@ -15,8 +15,18 @@ Option Explicit
 Public Const HKEY_CURRENT_USER As Long = &H80000001
 Private Const REG_SZ  As Long = 1                          ' Unicode nul terminated string
 
+Private Const KEY_QUERY_VALUE As Long = &H1
+Private Const KEY_SET_VALUE As Long = &H2
+Private Const KEY_ENUMERATE_SUB_KEYS As Long = &H8
+Private Const KEY_READ As Long = &H20019
+Private Const KEY_WRITE As Long = &H20006
+
+Private Const ERROR_SUCCESS As Long = 0
+Private Const ERROR_NO_MORE_ITEMS As Long = 259
+Private Const ERROR_MORE_DATA As Long = 234
+
 #If Not WIN64 Then ' VB6 only
-    Public Declare Function RegOpenKey Lib "advapi32.dll" Alias "RegOpenKeyA" (ByVal hKey As Long, ByVal lpSubKey As String, ByRef phkResult As Long) As Long  ' hKey LongPtr, phkResult As LongPtr *
+    'Public Declare Function RegOpenKey Lib "advapi32.dll" Alias "RegOpenKeyA" (ByVal hKey As Long, ByVal lpSubKey As String, ByRef phkResult As Long) As Long  ' hKey LongPtr, phkResult As LongPtr *
     Private Declare Function RegOpenKeyEx Lib "advapi32.dll" Alias "RegOpenKeyExA" ( _
     ByVal hKey As Long, _
     ByVal lpSubKey As String, _
@@ -28,6 +38,17 @@ Private Const REG_SZ  As Long = 1                          ' Unicode nul termina
     Public Declare Function RegCloseKey Lib "advapi32.dll" (ByVal hKey As Long) As Long ' hKey LongPtr *
     Public Declare Function RegCreateKey Lib "advapi32.dll" Alias "RegCreateKeyA" (ByVal hKey As Long, ByVal lpSubKey As String, ByRef phkResult As Long) As Long ' hKey LongPtr, phkResult LongPtr *
     Public Declare Function RegSetValueEx Lib "advapi32.dll" Alias "RegSetValueExA" (ByVal hKey As Long, ByVal lpValueName As String, ByVal Reserved As Long, ByVal dwType As Long, ByRef lpData As Any, ByVal cbData As Long) As Long  ' hKey LongPtr *
+    
+    Private Declare Function RegEnumKeyEx Lib "advapi32.dll" Alias "RegEnumKeyExA" ( _
+        ByVal hKey As Long, _
+        ByVal dwIndex As Long, _
+        ByVal lpName As String, _
+        lpcchName As Long, _
+        ByVal lpReserved As Long, _
+        ByVal lpClass As String, _
+        lpcchClass As Long, _
+        lpftLastWriteTime As Any) As Long
+        
 #End If
 
 '------------------------------------------------------ ENDS
@@ -139,6 +160,46 @@ Private Declare Function WritePrivateProfileString Lib "kernel32" _
 Private m_sgsSettingsDir As String
 Private m_sgsSettingsFile As String
 
+
+'---------------------------------------------------------------------------------------
+' Procedure : WriteRegistryString
+' Author    : chatGPT
+' Date      : 22/09/2026
+' Purpose   :
+'---------------------------------------------------------------------------------------
+'
+Private Function WriteRegistryString( _
+    ByVal hKey As Long, _
+    ByVal sValueName As String, _
+    ByVal sValue As String) As Boolean
+
+    Dim lResult As Long
+    Dim lDataSize As Long
+
+    On Error GoTo WriteRegistryString_Error
+    
+    'REG_SZ requires the terminating NULL to be included.
+    lDataSize = Len(sValue) + 1
+
+    lResult = RegSetValueEx( _
+                    hKey, _
+                    sValueName, _
+                    0, _
+                    REG_SZ, _
+                    ByVal sValue & vbNullChar, _
+                    lDataSize)
+
+    WriteRegistryString = (lResult = ERROR_SUCCESS) ' VB6 boolean success
+
+    On Error GoTo 0
+    Exit Function
+
+WriteRegistryString_Error:
+
+     MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure WriteRegistryString of Module Module2"
+
+End Function
+
 '---------------------------------------------------------------------------------------
 ' Procedure : regCreateKeyWriteStringClose
 ' Author    : beededea
@@ -146,32 +207,31 @@ Private m_sgsSettingsFile As String
 ' Purpose   : write to the registry
 '---------------------------------------------------------------------------------------
 '
-Public Function regCreateKeyWriteStringClose(ByRef hKey As Long, ByRef strPath As String, ByRef strvalue As String, ByRef strData As String) As Boolean
+Public Function regCreateKeyWriteStringClose(ByVal hKey As Long, ByVal strPath As String, ByVal sValueName As String, ByVal sValue As String) As Boolean
     ' hKey required As LongPtr
  
     Dim keyhand As Long: keyhand = 0 ' keyhand required As LongPtr
     Dim unusedReturnValue As Long
-    Dim lresult As Long
+    Dim lResult As Long
     Dim lDataSize As Long
-    Const ERROR_SUCCESS As Long = 0
     
     On Error GoTo regCreateKeyWriteStringClose_Error
 
     unusedReturnValue = RegCreateKey(hKey, strPath, keyhand)  ' hKey, keyhand required As LongPtr
-'    lresult = RegSetValueEx(keyhand, strvalue, 0, REG_SZ, ByVal strData, Len(strData)) ' keyhand required as longPtr
+'    lresult = RegSetValueEx(keyhand, sValueName, 0, REG_SZ, ByVal sValue, Len(sValue)) ' keyhand required as longPtr
     
     'REG_SZ requires the terminating NULL to be included.
-    lDataSize = Len(strData) + 1
+    lDataSize = Len(sValue) + 1
 
-    lresult = RegSetValueEx( _
+    lResult = RegSetValueEx( _
                     keyhand, _
-                    strvalue, _
+                    sValueName, _
                     0, _
                     REG_SZ, _
-                    ByVal strData & vbNullChar, _
+                    ByVal sValue & vbNullChar, _
                     lDataSize)
 
-    regCreateKeyWriteStringClose = (lresult = ERROR_SUCCESS) ' VB6 boolean success
+    regCreateKeyWriteStringClose = (lResult = ERROR_SUCCESS) ' VB6 boolean success
     unusedReturnValue = RegCloseKey(keyhand) ' keyhand required As LongPtr
 
    On Error GoTo 0
@@ -190,20 +250,13 @@ End Function
 ' Purpose   :
 '---------------------------------------------------------------------------------------
 ' hKey required As LongPtr
-Public Function regOpenKeyGetString(ByVal hKey As Long, ByVal strPath As String, ByRef strvalue As String) As String
+Public Function regOpenKeyGetString(ByVal hKey As Long, ByVal strPath As String, ByVal strvalue As String) As String
 
     Dim keyhand As Long: keyhand = 0 ' required As LongPtr
-    Dim lresult As Long: lresult = 0
+    Dim lResult As Long: lResult = 0
     Dim strBuf As String: strBuf = vbNullString
     Dim lDataBufSize As Long: lDataBufSize = 0
     Dim intZeroPos As Integer: intZeroPos = 0
-    
-    Const KEY_READ As Long = &H20019
-    Const KEY_WRITE As Long = &H20006
-    Const ERROR_SUCCESS As Long = 0
-    Const ERROR_NO_MORE_ITEMS As Long = 259
-    Const ERROR_MORE_DATA As Long = 234
-
     Dim lValueType As Long: lValueType = 0
 
     On Error GoTo regOpenKeyGetString_Error
@@ -213,23 +266,23 @@ Public Function regOpenKeyGetString(ByVal hKey As Long, ByVal strPath As String,
     
     ' hKey required As LongPtr, keyhand  required As LongPtr
     'Open the parent key using the newer RegOpenKeyEx with more control
-    lresult = RegOpenKeyEx( _
+    lResult = RegOpenKeyEx( _
                     hKey, _
                     strPath, _
                     0, _
                     KEY_READ Or KEY_WRITE, _
                     keyhand)
                     
-    If lresult <> ERROR_SUCCESS Then
-        Debug.Print "Unable to open key. " & strPath & " Error: "; lresult
+    If lResult <> ERROR_SUCCESS Then
+        Debug.Print "Unable to open key. " & strPath & " Error: "; lResult
         Exit Function
     End If
     
     'First call obtains the required buffer size.
     ' keyhand required As LongPtr, 3rd value 0& lpReserved 0& As LongPtr
-    lresult = RegQueryValueEx(keyhand, strvalue, 0&, lValueType, ByVal 0&, lDataBufSize)
+    lResult = RegQueryValueEx(keyhand, strvalue, 0&, lValueType, ByVal 0&, lDataBufSize)
         
-    If lresult <> ERROR_SUCCESS Then Exit Function
+    If lResult <> ERROR_SUCCESS Then Exit Function
 
     If lValueType <> REG_SZ Then Exit Function
     
@@ -237,9 +290,9 @@ Public Function regOpenKeyGetString(ByVal hKey As Long, ByVal strPath As String,
         'Registry size is in bytes. For the ANSI API, one byte per character.
         strBuf = String$(lDataBufSize, vbNullChar)
         ' keyhand  required As LongPtr, 3rd value 0& phkResult required As LongPtr
-        lresult = RegQueryValueEx(keyhand, strvalue, 0&, 0&, ByVal strBuf, lDataBufSize)
+        lResult = RegQueryValueEx(keyhand, strvalue, 0&, 0&, ByVal strBuf, lDataBufSize)
 
-        If lresult = ERROR_SUCCESS Then
+        If lResult = ERROR_SUCCESS Then
             intZeroPos = InStr(strBuf, Chr$(0))
             If intZeroPos > 0 Then
             
@@ -521,3 +574,217 @@ writeLogFile_Error:
           End If
     End With
 End Sub
+
+
+
+'---------------------------------------------------------------------------------------
+' Procedure : ReplaceMatchingDeviceIds
+' Author    : chatGPT/beededea
+' Date      : 22/09/2026
+' Purpose   :
+'---------------------------------------------------------------------------------------
+'
+Public Sub ReplaceMatchingDeviceIds(ByVal OriginalGDID As String, ByVal TemporaryGDID As String)
+
+    Dim nowValue As Date
+        
+    Const TOKEN_KEY As String = _
+        "SOFTWARE\Microsoft\IdentityCRL\Immersive\production\Token"
+
+    Dim hTokenKey As Long
+    Dim hSubKey As Long
+    Dim lResult As Long
+    Dim lIndex As Long
+    Dim sSubKeyName As String
+    Dim sDeviceId As String
+
+    On Error GoTo ReplaceMatchingDeviceIds_Error
+
+    'Open the parent Token key.
+    lResult = RegOpenKeyEx( _
+                    HKEY_CURRENT_USER, _
+                    TOKEN_KEY, _
+                    0, _
+                    KEY_READ Or KEY_WRITE, _
+                    hTokenKey)
+
+    If lResult <> ERROR_SUCCESS Then
+        Debug.Print "Unable to open Token key. Error: "; lResult
+        Exit Sub
+    End If
+
+    lIndex = 0
+
+    Do
+        'Registry subkey names can be up to 255 characters.
+        sSubKeyName = String$(256, vbNullChar)
+
+        Dim lNameLength As Long
+        lNameLength = 255
+
+        lResult = RegEnumKeyEx( _
+                        hTokenKey, _
+                        lIndex, _
+                        sSubKeyName, _
+                        lNameLength, _
+                        0, _
+                        vbNullString, _
+                        0, _
+                        ByVal 0&)
+
+        If lResult = ERROR_NO_MORE_ITEMS Then
+            Exit Do
+        End If
+
+        If lResult = ERROR_SUCCESS Then
+
+            sSubKeyName = Left$(sSubKeyName, lNameLength)
+
+            Debug.Print "Checking: "; sSubKeyName
+
+            'Open this particular GUID subkey.
+            hSubKey = 0
+
+            lResult = RegOpenKeyEx( _
+                            hTokenKey, _
+                            sSubKeyName, _
+                            0, _
+                            KEY_QUERY_VALUE Or KEY_SET_VALUE, _
+                            hSubKey)
+
+            If lResult = ERROR_SUCCESS Then
+
+                'Read DeviceId.
+                sDeviceId = vbNullString
+
+                If ReadRegistryString(hSubKey, "DeviceId", sDeviceId) Then
+
+                    Debug.Print "    DeviceId: "; sDeviceId
+
+                    'Compare with our known GDID.
+                    If StrComp(sDeviceId, OriginalGDID, vbBinaryCompare) = 0 Then
+
+                        nowValue = Now()
+                        
+                        Debug.Print "    *** MATCH ***"
+
+                        'Replace with temporary GDID.
+                        If WriteRegistryString( _
+                                    hSubKey, _
+                                    "DeviceId", _
+                                    TemporaryGDID) Then
+
+                            Debug.Print "    DeviceId replaced with: "; _
+                                        TemporaryGDID
+                                        
+                            Call writeLogFile("DeviceId replaced with - " & TemporaryGDID & " in Immersive\production\Token", CStr(nowValue))
+            
+                        Else
+                            Debug.Print "    ERROR writing DeviceId"
+                        End If
+
+                    End If
+
+                Else
+                    Debug.Print "    DeviceId not found/readable."
+                End If
+
+                RegCloseKey hSubKey
+                hSubKey = 0
+
+            Else
+                Debug.Print "    Unable to open subkey. Error: "; lResult
+            End If
+
+            lIndex = lIndex + 1
+
+        Else
+            Debug.Print "RegEnumKeyEx error: "; lResult
+            Exit Do
+        End If
+
+    Loop
+
+    RegCloseKey hTokenKey
+
+    On Error GoTo 0
+    Exit Sub
+
+ReplaceMatchingDeviceIds_Error:
+
+     MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure ReplaceMatchingDeviceIds of Module Module2"
+
+End Sub
+
+
+
+'---------------------------------------------------------------------------------------
+' Procedure : ReadRegistryString
+' Author    : beededea
+' Date      : 22/09/2026
+' Purpose   :
+'---------------------------------------------------------------------------------------
+'
+Private Function ReadRegistryString( _
+    ByVal hKey As Long, _
+    ByVal ValueName As String, _
+    ByRef Value As String) As Boolean
+
+    Dim lResult As Long
+    Dim lType As Long
+    Dim lDataSize As Long
+
+    Dim sBuffer As String
+
+    'First call obtains the required buffer size.
+    On Error GoTo ReadRegistryString_Error
+
+    lResult = RegQueryValueEx( _
+                    hKey, _
+                    ValueName, _
+                    0, _
+                    lType, _
+                    ByVal 0&, _
+                    lDataSize)
+
+    If lResult <> ERROR_SUCCESS Then Exit Function
+
+    If lType <> REG_SZ Then Exit Function
+
+    If lDataSize <= 0 Then
+        Value = vbNullString
+        ReadRegistryString = True
+        Exit Function
+    End If
+
+    'Registry size is in bytes. For the ANSI API, one byte per character.
+    sBuffer = String$(lDataSize, vbNullChar)
+
+    lResult = RegQueryValueEx( _
+                    hKey, _
+                    ValueName, _
+                    0, _
+                    lType, _
+                    ByVal sBuffer, _
+                    lDataSize)
+
+    If lResult <> ERROR_SUCCESS Then Exit Function
+
+    'Remove the terminating NULL.
+    If lDataSize > 0 Then
+        Value = Left$(sBuffer, lDataSize - 1)
+    Else
+        Value = vbNullString
+    End If
+
+    ReadRegistryString = True
+
+    On Error GoTo 0
+    Exit Function
+
+ReadRegistryString_Error:
+
+     MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure ReadRegistryString of Module Module2"
+
+End Function
+
