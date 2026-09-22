@@ -17,6 +17,13 @@ Private Const REG_SZ  As Long = 1                          ' Unicode nul termina
 
 #If Not WIN64 Then ' VB6 only
     Public Declare Function RegOpenKey Lib "advapi32.dll" Alias "RegOpenKeyA" (ByVal hKey As Long, ByVal lpSubKey As String, ByRef phkResult As Long) As Long  ' hKey LongPtr, phkResult As LongPtr *
+    Private Declare Function RegOpenKeyEx Lib "advapi32.dll" Alias "RegOpenKeyExA" ( _
+    ByVal hKey As Long, _
+    ByVal lpSubKey As String, _
+    ByVal ulOptions As Long, _
+    ByVal samDesired As Long, _
+    phkResult As Long) As Long
+    
     Public Declare Function RegQueryValueEx Lib "advapi32.dll" Alias "RegQueryValueExA" (ByVal hKey As Long, ByVal lpValueName As String, ByVal lpReserved As Long, ByRef lpType As Long, ByRef lpData As Any, ByRef lpcbData As Long) As Long ' hKey As LongPtr, lpReserved LongPtr *
     Public Declare Function RegCloseKey Lib "advapi32.dll" (ByVal hKey As Long) As Long ' hKey LongPtr *
     Public Declare Function RegCreateKey Lib "advapi32.dll" Alias "RegCreateKeyA" (ByVal hKey As Long, ByVal lpSubKey As String, ByRef phkResult As Long) As Long ' hKey LongPtr, phkResult LongPtr *
@@ -133,68 +140,113 @@ Private m_sgsSettingsDir As String
 Private m_sgsSettingsFile As String
 
 '---------------------------------------------------------------------------------------
-' Procedure : writeRegistry
+' Procedure : regCreateKeyWriteStringClose
 ' Author    : beededea
 ' Date      : 05/07/2019
 ' Purpose   : write to the registry
 '---------------------------------------------------------------------------------------
 '
-Public Sub writeRegistry(ByRef hKey As Long, ByRef strPath As String, ByRef strvalue As String, ByRef strData As String)
+Public Function regCreateKeyWriteStringClose(ByRef hKey As Long, ByRef strPath As String, ByRef strvalue As String, ByRef strData As String) As Boolean
     ' hKey required As LongPtr
  
     Dim keyhand As Long: keyhand = 0 ' keyhand required As LongPtr
-    Dim unusedReturnValue As Long: unusedReturnValue = 0
+    Dim unusedReturnValue As Long
+    Dim lresult As Long
+    Dim lDataSize As Long
+    Const ERROR_SUCCESS As Long = 0
     
-    On Error GoTo writeRegistry_Error
+    On Error GoTo regCreateKeyWriteStringClose_Error
 
     unusedReturnValue = RegCreateKey(hKey, strPath, keyhand)  ' hKey, keyhand required As LongPtr
-    unusedReturnValue = RegSetValueEx(keyhand, strvalue, 0, REG_SZ, ByVal strData, Len(strData)) ' keyhand required as longPtr
+'    lresult = RegSetValueEx(keyhand, strvalue, 0, REG_SZ, ByVal strData, Len(strData)) ' keyhand required as longPtr
+    
+    'REG_SZ requires the terminating NULL to be included.
+    lDataSize = Len(strData) + 1
+
+    lresult = RegSetValueEx( _
+                    keyhand, _
+                    strvalue, _
+                    0, _
+                    REG_SZ, _
+                    ByVal strData & vbNullChar, _
+                    lDataSize)
+
+    regCreateKeyWriteStringClose = (lresult = ERROR_SUCCESS) ' VB6 boolean success
     unusedReturnValue = RegCloseKey(keyhand) ' keyhand required As LongPtr
 
    On Error GoTo 0
-   Exit Sub
+   Exit Function
 
-writeRegistry_Error:
+regCreateKeyWriteStringClose_Error:
 
-    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure writeRegistry of module module1"
-End Sub
+    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure regCreateKeyWriteStringClose of module module1"
+End Function
 
 
 '---------------------------------------------------------------------------------------
-' Procedure : getstring
+' Procedure : regOpenKeyGetString
 ' Author    : beededea
 ' Date      : 05/07/2019
 ' Purpose   :
 '---------------------------------------------------------------------------------------
 ' hKey required As LongPtr
-Public Function getstring(ByRef hKey As Long, ByRef strPath As String, ByRef strvalue As String) As String
+Public Function regOpenKeyGetString(ByVal hKey As Long, ByVal strPath As String, ByRef strvalue As String) As String
 
     Dim keyhand As Long: keyhand = 0 ' required As LongPtr
-    Dim lResult As Long: lResult = 0
+    Dim lresult As Long: lresult = 0
     Dim strBuf As String: strBuf = vbNullString
     Dim lDataBufSize As Long: lDataBufSize = 0
     Dim intZeroPos As Integer: intZeroPos = 0
-    Dim rvar As Integer: rvar = 0
+    
+    Const KEY_READ As Long = &H20019
+    Const KEY_WRITE As Long = &H20006
+    Const ERROR_SUCCESS As Long = 0
+    Const ERROR_NO_MORE_ITEMS As Long = 259
+    Const ERROR_MORE_DATA As Long = 234
 
-    Dim lValueType As Variant ' cannot initialise
+    Dim lValueType As Long: lValueType = 0
 
-    On Error GoTo getstring_Error
+    On Error GoTo regOpenKeyGetString_Error
 
-    ' hKey  required As LongPtr, keyhand  required As LongPtr
-    rvar = RegOpenKey(hKey, strPath, keyhand)
-    ' keyhand  required As LongPtr, 3rd value 0& lpReserved 0& As LongPtr
-    lResult = RegQueryValueEx(keyhand, strvalue, 0&, lValueType, ByVal 0&, lDataBufSize)
+    ' hKey required As LongPtr, keyhand  required As LongPtr
+    'lResult = RegOpenKey(hKey, strPath, keyhand)
+    
+    ' hKey required As LongPtr, keyhand  required As LongPtr
+    'Open the parent key using the newer RegOpenKeyEx with more control
+    lresult = RegOpenKeyEx( _
+                    hKey, _
+                    strPath, _
+                    0, _
+                    KEY_READ Or KEY_WRITE, _
+                    keyhand)
+                    
+    If lresult <> ERROR_SUCCESS Then
+        Debug.Print "Unable to open key. " & strPath & " Error: "; lresult
+        Exit Function
+    End If
+    
+    'First call obtains the required buffer size.
+    ' keyhand required As LongPtr, 3rd value 0& lpReserved 0& As LongPtr
+    lresult = RegQueryValueEx(keyhand, strvalue, 0&, lValueType, ByVal 0&, lDataBufSize)
+        
+    If lresult <> ERROR_SUCCESS Then Exit Function
+
+    If lValueType <> REG_SZ Then Exit Function
+    
     If lValueType = REG_SZ Then
-        strBuf = String$(lDataBufSize, " ")
+        'Registry size is in bytes. For the ANSI API, one byte per character.
+        strBuf = String$(lDataBufSize, vbNullChar)
         ' keyhand  required As LongPtr, 3rd value 0& phkResult required As LongPtr
-        lResult = RegQueryValueEx(keyhand, strvalue, 0&, 0&, ByVal strBuf, lDataBufSize)
-        Dim ERROR_SUCCESS As Variant
-        If lResult = ERROR_SUCCESS Then
+        lresult = RegQueryValueEx(keyhand, strvalue, 0&, 0&, ByVal strBuf, lDataBufSize)
+
+        If lresult = ERROR_SUCCESS Then
             intZeroPos = InStr(strBuf, Chr$(0))
             If intZeroPos > 0 Then
-                getstring = Left$(strBuf, intZeroPos - 1)
+            
+               'Remove the terminating NULL.
+                regOpenKeyGetString = Left$(strBuf, intZeroPos - 1)
             Else
-                getstring = strBuf
+                regOpenKeyGetString = strBuf
             End If
         End If
     End If
@@ -202,9 +254,9 @@ Public Function getstring(ByRef hKey As Long, ByRef strPath As String, ByRef str
    On Error GoTo 0
    Exit Function
 
-getstring_Error:
+regOpenKeyGetString_Error:
 
-    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure getstring of Module Common"
+    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure regOpenKeyGetString of Module Common"
 End Function
 
 

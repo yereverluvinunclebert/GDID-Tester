@@ -3,22 +3,8 @@ Attribute VB_Name = "ENCRYPT"
 ' Module    : ENCRYPT
 ' DateTime  : 04/08/2006 14:29
 ' Author    : Dean
-' Purpose   :
+' Purpose   : obfuscation of the GDID
 '---------------------------------------------------------------------------------------
-'   ============================================================
-'    ----------------------------------------------------------
-'     Application Name: FireStrike Military Simulation
-'                       Software solution for the tabletop Wargamer
-'     Developer/Programmer: Dean Beedell
-'    ----------------------------------------------------------
-'     Module Name: ENCRYPT
-'     Module File: Encrypt.bas
-'     Module Type: Form
-'     Module Description:
-'    ----------------------------------------------------------
-'     © Copyright LightQuick 2006
-'    ----------------------------------------------------------
-'   ============================================================
 Option Explicit
 
 '----------------------------------------
@@ -34,11 +20,9 @@ Public Function encryptstr(messagetext As String) As String
     Dim d As Integer
     Dim cr As String
 
- 
     code1 = "GDUID"
     Encryptcode = "6F09E"
     a = 0: b = 0: C = 0: cr = vbNullString
-
 
     Do While a < Len(messagetext)
         a = a + 1
