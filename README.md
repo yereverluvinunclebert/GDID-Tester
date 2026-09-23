@@ -60,9 +60,9 @@ Once the GDID has been obfuscated, to prevent further modification of the GDID y
 
 For more information on the GDID tracking key visit this link : https://www.it-connect.tech/windows-gdid-impossible-to-delete-but-you-can-block-it/
 
-**Use this utility at your own risk
+**Use this utility at your own risk**
 
-It modifies values in your registry and so the results might be unexpected. Backup your registry, set a restore point prior to running the program. Backup your system hard drive, do whatever you have to do to make you feel secure that you can recover your system just in case.
+**It modifies values in your registry and so the results might be unexpected. Backup your registry, set a restore point prior to running the program. Backup your system hard drive, do whatever you have to do to make you feel secure that you can recover your system just in case.
 Look at the code to give you the happiness you need to run this program. Compile it yourself using VB6 or TwinBasic.** 
 
 
