@@ -45,7 +45,7 @@ All the above settings will be saved and restored on program restart.
   
   **C:\USERS\<username>\APPDATA\ROAMING\GDITester**
 
-<img width="669" height="710" alt="image" src="https://github.com/user-attachments/assets/667474b1-1a6e-4997-b43d-a8fbaf696f0c" />
+<img width="770" height="394" alt="image" src="https://github.com/user-attachments/assets/de2f223c-381d-48f4-8d7f-908f7c504a62" />
 
 **Fig. 02 The logfile showing typical contents.** (Fake GDIDs)
 
