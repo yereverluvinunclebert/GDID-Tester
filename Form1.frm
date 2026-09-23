@@ -89,7 +89,7 @@ Begin VB.Form Form1
       Top             =   3780
       Width           =   1515
    End
-   Begin VB.CheckBox chkAutomaticRemoval 
+   Begin VB.CheckBox chkAutomaticBlanking 
       Caption         =   "Enable Automatic Removal (blanking)"
       Height          =   405
       Left            =   330
@@ -347,12 +347,6 @@ Private Sub Form_Load()
     
     ' set the tooltips
     Call setTooltips
-
-    ' read the GDID registry values
-    Call readRegistryExtendedPropertiesLid
-    
-    ' always test the GDID value on startup regardless of the testing timer status
-    Call testExtendedPropertiesLid
     
     ' check the first time run status
     Call setFirstRunStatus
@@ -462,7 +456,7 @@ Private Sub generateGDID(auto As Boolean)
     If bResult = False Then
         Exit Sub
     End If
-    Call readRegistryExtendedPropertiesLid
+    GDID = readRegistryExtendedPropertiesLid
         
     Form1.Caption = "GDID Tester " & newGDID
     
@@ -485,7 +479,7 @@ Private Sub btnReadRegistry_Click()
 
     On Error GoTo btnReadRegistry_Click_Error
 
-    Call testExtendedPropertiesLid
+    Call modifyExtendedPropertiesLid
     If GDID = "" Then
         MsgBox "No GDID found in the registry"
     Else
@@ -513,7 +507,7 @@ Private Sub btnRemoveRegValue_Click()
     
     Call writeLogFile("Removed the GDID manually ", Now())
     
-    Call readRegistryExtendedPropertiesLid
+    GDID = readRegistryExtendedPropertiesLid
     
     If txtRegistryValue.Text = "" Then
         MsgBox "No GDID found in the registry"
@@ -523,7 +517,7 @@ Private Sub btnRemoveRegValue_Click()
         If bResult = False Then
             Exit Sub
         End If
-        Call readRegistryExtendedPropertiesLid
+        GDID = readRegistryExtendedPropertiesLid
     End If
     
     On Error GoTo 0
@@ -553,7 +547,7 @@ Private Sub chkAutomaticGeneration_Click()
     End If
 
     If chkAutomaticGeneration.Value = 1 Then
-        chkAutomaticRemoval.Value = 0
+        chkAutomaticBlanking.Value = 0
         chkRegularTesting.Value = 1
     End If
 
@@ -629,33 +623,33 @@ chkAlertMsgBox_Click_Error:
 End Sub
 
 '---------------------------------------------------------------------------------------
-' Procedure : chkAutomaticRemoval_Click
+' Procedure : chkAutomaticBlanking_Click
 ' Author    : beededea
 ' Date      : 05/08/2026
 ' Purpose   :
 '---------------------------------------------------------------------------------------
 '
-Private Sub chkAutomaticRemoval_Click()
+Private Sub chkAutomaticBlanking_Click()
 
-    On Error GoTo chkAutomaticRemoval_Click_Error
+    On Error GoTo chkAutomaticBlanking_Click_Error
     
-    gsAutomaticRemoval = CStr(chkAutomaticRemoval.Value)
+    gsAutomaticRemoval = CStr(chkAutomaticBlanking.Value)
     
     If fFExists(gsSettingsFile) Then
         sPutINISetting "Software\GDIDTester", "AutomaticRemoval", gsAutomaticRemoval, gsSettingsFile
     End If
 
-    If chkAutomaticRemoval.Value = 1 Then chkRegularTesting.Value = 1
-    If chkAutomaticRemoval.Value = 1 Then chkAutomaticGeneration.Value = 0
+    If chkAutomaticBlanking.Value = 1 Then chkRegularTesting.Value = 1
+    If chkAutomaticBlanking.Value = 1 Then chkAutomaticGeneration.Value = 0
     
     If gbStartupFlg = False Then Call writeLogFile("Changing the Automatic Removal status manually " & gsAutomaticRemoval, Now())
    
     On Error GoTo 0
     Exit Sub
 
-chkAutomaticRemoval_Click_Error:
+chkAutomaticBlanking_Click_Error:
 
-     MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure chkAutomaticRemoval_Click of Form Form1"
+     MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure chkAutomaticBlanking_Click of Form Form1"
 End Sub
 
 '---------------------------------------------------------------------------------------
@@ -680,7 +674,7 @@ Private Sub chkRegularTesting_Click()
     End If
     
     If chkRegularTesting.Value = 0 Then
-        chkAutomaticRemoval.Value = 0
+        chkAutomaticBlanking.Value = 0
         chkAutomaticGeneration.Value = 0
         tmrTicker.Enabled = False
         btnTicks.Visible = False
@@ -771,7 +765,7 @@ Private Sub adjustControls()
     ' configuration
     chkAlertMsgBox.Value = CInt(gsAlertMsgBox)
     chkRegularTesting.Value = CInt(gsRegularTesting) ' implicitly starts the main timer
-    chkAutomaticRemoval.Value = CInt(gsAutomaticRemoval)
+    chkAutomaticBlanking.Value = CInt(gsAutomaticRemoval)
     chkAutomaticGeneration.Value = CInt(gsAutomaticGeneration)
     sliGDIDInterval.Value = CInt(gsGDIDInterval)
     
@@ -795,22 +789,26 @@ End Sub
 ' Purpose   :
 '---------------------------------------------------------------------------------------
 '
-Private Sub readRegistryExtendedPropertiesLid()
+Private Function readRegistryExtendedPropertiesLid() As String
+
+    Dim thisGDID As String
     
     On Error GoTo readRegistryExtendedPropertiesLid_Error
 
-    GDID = regOpenKeyGetString(HKEY_CURRENT_USER, "SOFTWARE\Microsoft\IdentityCRL\ExtendedProperties", "lid")
+    thisGDID = regOpenKeyGetString(HKEY_CURRENT_USER, "SOFTWARE\Microsoft\IdentityCRL\ExtendedProperties", "lid")
     
-    txtRegistryValue.Text = GDID
+    txtRegistryValue.Text = thisGDID
+    
+    readRegistryExtendedPropertiesLid = thisGDID ' return
 
     On Error GoTo 0
-    Exit Sub
+    Exit Function
 
 readRegistryExtendedPropertiesLid_Error:
 
-     MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure readRegistryExtendedPropertiesLid of Form Form1"
+     MsgBox "Error " & Err.Number & " (" & Err.Description & ") in function readRegistryExtendedPropertiesLid of Form Form1"
 
-End Sub
+End Function
 
 '---------------------------------------------------------------------------------------
 ' Procedure : setFirstRunStatus
@@ -969,10 +967,12 @@ End Sub
 Private Sub sliGDIDInterval_Change()
 
     On Error GoTo sliGDIDInterval_Change_Error
-
-    gsGDIDInterval = CStr(sliGDIDInterval.Value)
     
     tmrGDIDTester.Interval = sliGDIDInterval.Value * 1000
+
+    If gbStartupFlg = True Then Exit Sub
+
+    gsGDIDInterval = CStr(sliGDIDInterval.Value)
     
     If sliGDIDInterval.Value <= 0 Then
         tmrGDIDTester.Enabled = False
@@ -982,7 +982,6 @@ Private Sub sliGDIDInterval_Change()
     Else
         If gsRegularTesting = "1" Then
             chkRegularTesting.Value = 1
-            tmrGDIDTester.Enabled = False
             tmrGDIDTester.Enabled = True
         End If
     End If
@@ -1017,9 +1016,13 @@ Private Sub tmrGDIDTester_Timer()
     On Error GoTo tmrGDIDTester_tmrGDIDTester_Error
     
     tmrTicker.Enabled = True
-        
-    Call testExtendedPropertiesLid
-    Call ReplaceMatchingDeviceIds(gsOriginalGDID, gsAutoGeneratedGDID)
+    
+    If GDIDStatusChanged = True Then
+        Call modifyExtendedPropertiesLid
+        Call ReplaceMatchingDeviceIds(gsOriginalGDID, gsAutoGeneratedGDID)
+    End If
+
+    gbStartupFlg = False
 
     On Error GoTo 0
     Exit Sub
@@ -1029,80 +1032,102 @@ tmrGDIDTester_tmrGDIDTester_Error:
      MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure tmrGDIDTester_tmrGDIDTester of Form Form1"
 End Sub
 
+'---------------------------------------------------------------------------------------
+' Procedure : GDIDStatusChanged
+' Author    : beededea
+' Date      : 23/09/2026
+' Purpose   :
+'---------------------------------------------------------------------------------------
+'
+Private Function GDIDStatusChanged() As Boolean
+    Dim nowValue As Date
+    Dim bResult As Boolean
 
+    On Error GoTo GDIDStatusChanged_Error
+    
+    gbOldRegValue = GDID
+    nowValue = Now()
+    
+    GDID = readRegistryExtendedPropertiesLid
+    
+    ' if it has been made blank, move on
+    If GDID <> "" Then
+         ' if the current auto generated GDID is the same as the stored GDID that we have to compare then there is no need to generate new
+        If gsAutoGeneratedGDID = gbOldRegValue Then
+            GDIDStatusChanged = False
+        Else
+            GDIDStatusChanged = True
+        End If
+    End If
+
+    On Error GoTo 0
+    Exit Function
+
+GDIDStatusChanged_Error:
+
+     MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure GDIDStatusChanged of Form Form1"
+End Function
 
 '---------------------------------------------------------------------------------------
-' Procedure : testExtendedPropertiesLid
+' Procedure : modifyExtendedPropertiesLid
 ' Author    : beededea
 ' Date      : 03/08/2026
 ' Purpose   :
 '---------------------------------------------------------------------------------------
 '
-Private Sub testExtendedPropertiesLid()
+Private Sub modifyExtendedPropertiesLid()
 
-    Dim oldRegValue As String: oldRegValue = vbNullString
     Dim nowValue As Date
     Dim bResult As Boolean
 
-    On Error GoTo testExtendedPropertiesLid_Error
+    On Error GoTo modifyExtendedPropertiesLid_Error
 
-    oldRegValue = GDID
     nowValue = Now()
     
-    Call readRegistryExtendedPropertiesLid
+    If chkAutomaticBlanking.Value = 1 Then
+        bResult = regCreateKeyWriteStringClose(HKEY_CURRENT_USER, "SOFTWARE\Microsoft\IdentityCRL\ExtendedProperties", "lid", "")
+        If bResult <> 0 Then
+            Exit Sub
+        End If
+        GDID = readRegistryExtendedPropertiesLid
+        Exit Sub
+    End If
     
-    If oldRegValue <> "" Then
+    
+    If chkAutomaticGeneration.Value = 1 Then
         
-        If chkAutomaticRemoval.Value = 1 Then
-            bResult = regCreateKeyWriteStringClose(HKEY_CURRENT_USER, "SOFTWARE\Microsoft\IdentityCRL\ExtendedProperties", "lid", "")
-            If bResult <> 0 Then
-                Exit Sub
+            Call generateGDID(True)
+           
+            If gbStartupFlg = True Then
+                Call writeLogFile("GDID auto-generated at start up - " & GDID, CStr(nowValue))
+            Else
+                Call writeLogFile("GDID auto-generated " & GDID, CStr(nowValue))
             End If
-            Call readRegistryExtendedPropertiesLid
-        End If
-        
-     
-        If chkAutomaticGeneration.Value = 1 Then
             
-            ' if the GDID is the same as the stored generated GDID then there is no need to generate new
-            If gsAutoGeneratedGDID <> oldRegValue Then
-                Call generateGDID(True)
-               
-                If gbStartupFlg = True Then
-                    Call writeLogFile("GDID auto-generated at start up - " & GDID, CStr(nowValue))
-                Else
-                    Call writeLogFile("GDID auto-generated " & GDID, CStr(nowValue))
-                End If
-                
-                Call writeCombo(nowValue)
-                
-                If gbStartupFlg = False Then
-                    If chkAlertMsgBox.Value = 1 Then MsgBox "GDID has been auto-generated"
-                End If
-                Call writeLogFile("Changed from - " & oldRegValue)
-            End If
-        Else
-
             Call writeCombo(nowValue)
-            Call writeLogFile("GDID Changed " & GDID, CStr(nowValue))
             
-            If chkAlertMsgBox.Value = 1 Then
-                If gbStartupFlg = False Then MsgBox "GDID has been changed"
+            If gbStartupFlg = False Then
+                If chkAlertMsgBox.Value = 1 Then MsgBox "GDID has been auto-generated"
             End If
-            Call writeLogFile("Changed from - " & oldRegValue)
-        End If
-        
+            Call writeLogFile("Changed from - " & gbOldRegValue)
 
-        gbStartupFlg = False
-                
+    Else
+    
+        Call writeCombo(nowValue)
+        Call writeLogFile("GDID Changed " & GDID, CStr(nowValue))
+        
+        If chkAlertMsgBox.Value = 1 Then
+            If gbStartupFlg = False Then MsgBox "GDID has been changed"
+        End If
+        Call writeLogFile("Changed from - " & gbOldRegValue)
     End If
 
     On Error GoTo 0
     Exit Sub
 
-testExtendedPropertiesLid_Error:
+modifyExtendedPropertiesLid_Error:
 
-     MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure testExtendedPropertiesLid of Form Form1"
+     MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure modifyExtendedPropertiesLid of Form Form1"
 End Sub
 
 
@@ -1116,12 +1141,11 @@ End Sub
 '
 Private Sub testImmersiveProductionTokenKeys()
 
-    Dim oldRegValue As String: oldRegValue = vbNullString
     Dim nowValue As Date
 
     On Error GoTo testImmersiveProductionTokenKeys_Error
 
-    oldRegValue = GDID
+    gbOldRegValue = GDID
     nowValue = Now()
     
     'Loop through all the keys
@@ -1134,9 +1158,9 @@ Private Sub testImmersiveProductionTokenKeys()
 'extract the DeviceId, match it with the known original GDID and see which match.
 'Change the DeviceID to match the new generated GDID
     
-    If oldRegValue <> "" Then
+    If gbOldRegValue <> "" Then
         
-        If chkAutomaticRemoval.Value = 1 Then
+        If chkAutomaticBlanking.Value = 1 Then
             'bResult = regCreateKeyWriteStringClose(HKEY_CURRENT_USER, "SOFTWARE\Microsoft\IdentityCRL\Immersive\production\Token\", "lid", "")
             'Call readRegistryImmersiveProductionTokenKeys
         End If
@@ -1239,7 +1263,7 @@ Private Sub setTooltips()
     chkAlertMsgBox.ToolTipText = "This check box will enable a pop-up message box to appear in the centre of the screen when a GDID is found."
     chkRegularTesting.ToolTipText = "This check box will enable the regular testing timer."
     btnClear.ToolTipText = "This button will clear any stored dates/times."
-    chkAutomaticRemoval.ToolTipText = "This check box when enabled will remove any remote-generated GDID."
+    chkAutomaticBlanking.ToolTipText = "This check box when enabled will remove any remote-generated GDID."
     chkAutomaticGeneration.ToolTipText = "This check box when enabled will replace any current registry key with a fake GDID"
     chkWindowsStartup.ToolTipText = "Checking this box will cause this utility to restart on each windows startup."
     btnGenerate.ToolTipText = "This button generates a new unique 64bit GDID, entirely random."

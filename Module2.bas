@@ -581,7 +581,11 @@ End Sub
 ' Procedure : ReplaceMatchingDeviceIds
 ' Author    : chatGPT/beededea
 ' Date      : 22/09/2026
-' Purpose   :
+' Purpose   : Within the registry location there are sub keys located of the form : {12E984BD-5803-4D78-9EFB-BED7B9212C26}
+'             For each sub key found, there is a DeviceId value that needs to be extracted. That contains a 16 character GDID value.
+'             Extract the DeviceId, match it with our known original string GDID and see which match. Then we replace that GDID value
+'             with a temporary 16 character string that we generate elsewhere. Then we write back each maching subkey to the registry.
+'
 '---------------------------------------------------------------------------------------
 '
 Public Sub ReplaceMatchingDeviceIds(ByVal OriginalGDID As String, ByVal TemporaryGDID As String)
@@ -597,6 +601,7 @@ Public Sub ReplaceMatchingDeviceIds(ByVal OriginalGDID As String, ByVal Temporar
     Dim lIndex As Long
     Dim sSubKeyName As String
     Dim sDeviceId As String
+    Dim lNameLength As Long
 
     On Error GoTo ReplaceMatchingDeviceIds_Error
 
@@ -618,10 +623,7 @@ Public Sub ReplaceMatchingDeviceIds(ByVal OriginalGDID As String, ByVal Temporar
     Do
         'Registry subkey names can be up to 255 characters.
         sSubKeyName = String$(256, vbNullChar)
-
-        Dim lNameLength As Long
         lNameLength = 255
-
         lResult = RegEnumKeyEx( _
                         hTokenKey, _
                         lIndex, _
@@ -637,14 +639,11 @@ Public Sub ReplaceMatchingDeviceIds(ByVal OriginalGDID As String, ByVal Temporar
         End If
 
         If lResult = ERROR_SUCCESS Then
-
             sSubKeyName = Left$(sSubKeyName, lNameLength)
-
             Debug.Print "Checking: "; sSubKeyName
 
             'Open this particular GUID subkey.
             hSubKey = 0
-
             lResult = RegOpenKeyEx( _
                             hTokenKey, _
                             sSubKeyName, _
@@ -653,19 +652,15 @@ Public Sub ReplaceMatchingDeviceIds(ByVal OriginalGDID As String, ByVal Temporar
                             hSubKey)
 
             If lResult = ERROR_SUCCESS Then
-
                 'Read DeviceId.
                 sDeviceId = vbNullString
 
                 If ReadRegistryString(hSubKey, "DeviceId", sDeviceId) Then
-
                     Debug.Print "    DeviceId: "; sDeviceId
 
                     'Compare with our known GDID.
                     If StrComp(sDeviceId, OriginalGDID, vbBinaryCompare) = 0 Then
-
                         nowValue = Now()
-                        
                         Debug.Print "    *** MATCH ***"
 
                         'Replace with temporary GDID.
@@ -674,35 +669,27 @@ Public Sub ReplaceMatchingDeviceIds(ByVal OriginalGDID As String, ByVal Temporar
                                     "DeviceId", _
                                     TemporaryGDID) Then
 
-                            Debug.Print "    DeviceId replaced with: "; _
-                                        TemporaryGDID
-                                        
+                            Debug.Print "    DeviceId replaced with: "; TemporaryGDID
                             Call writeLogFile("DeviceId replaced with - " & TemporaryGDID & " in Immersive\production\Token", CStr(nowValue))
-            
                         Else
                             Debug.Print "    ERROR writing DeviceId"
                         End If
-
                     End If
-
                 Else
                     Debug.Print "    DeviceId not found/readable."
                 End If
 
                 RegCloseKey hSubKey
                 hSubKey = 0
-
             Else
                 Debug.Print "    Unable to open subkey. Error: "; lResult
             End If
 
             lIndex = lIndex + 1
-
         Else
             Debug.Print "RegEnumKeyEx error: "; lResult
             Exit Do
         End If
-
     Loop
 
     RegCloseKey hTokenKey
