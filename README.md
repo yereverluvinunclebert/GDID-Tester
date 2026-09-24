@@ -6,7 +6,9 @@ A small program in VB6/TwinBasic (nothing special) that allows you to view the G
 
 **Fig. 01 The GDID Tester Utility**
 
-HKEY_CURRENT_USER, "SOFTWARE\Microsoft\IdentityCRL\ExtendedProperties", "lid"
+ GDID stored here - HKEY_CURRENT_USER, "SOFTWARE\Microsoft\IdentityCRL\ExtendedProperties", "lid"
+ 
+ GDID contained within a set of sub keys under: Computer\HKEY_CURRENT_USER\SOFTWARE\Microsoft\IdentityCRL\Immersive\production\Token\
 
 **This key is used to identify your PC and what it accesses on the net.**
 
@@ -59,26 +61,10 @@ traditional desktop applications, Dropbox for storage and a local login. I do no
 Once the GDID has been obfuscated, to prevent further modification of the GDID you could also run a tool such as ["Windows Firewall Notifier"](https://github.com/wokhan/WFN) that can be configured to prevent any unwanted changes to the GDID by preventing login.live.com access to your computer.
 
 For more information on the GDID tracking key visit this link : https://www.it-connect.tech/windows-gdid-impossible-to-delete-but-you-can-block-it/
-
-**Use this utility at your own risk**
-
-**It modifies values in your registry and so the results might be unexpected. Backup your registry, set a restore point prior to running the program. Backup your system hard drive, do whatever you have to do to make you feel secure that you can recover your system just in case.
-Look at the code to give you the happiness you need to run this program. Compile it yourself using VB6 or TwinBasic.** 
-
-
 Later changes to come:
 
 * Complete variable changes to make it fully 64bit 
 * Use the API to test the GDID key instead of a timer.
-  
-* Phase II - WIP - deal with the GDID contained within the following set of keys:
-  Computer\HKEY_CURRENT_USER\SOFTWARE\Microsoft\IdentityCRL\Immersive\production\Token\
-  Loop through all the keys there eg.
-
-   {12E984BD-5803-4D78-9EFB-BED7B9212C26}
-
-  extract the DeviceId, match it with the known original GDID and see which match.
-  Change the DeviceID to match the new generated GDID
 
 * Phase III - deal with the GDID values within the following set of keys:
   Computer\HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\IdentityCRL\NegativeCache
@@ -88,3 +74,11 @@ Later changes to come:
   
   extract the first 16 chars of the key name, match it with the known original GDID and see which match.
   If found, change the keyname to match the new generated GDID
+
+
+**Use this utility at your own risk**
+
+**It modifies values in your registry and so the results might be unexpected. Backup your registry, set a restore point prior to running the program. Backup your system hard drive, do whatever you have to do to make you feel secure that you can recover your system just in case.
+Look at the code to give you the happiness you need to run this program. Compile it yourself using VB6 or TwinBasic.**
+
+**Tested on Windows 10 only**
