@@ -7,6 +7,7 @@ A small program in VB6/TwinBasic (nothing special) that allows you to view the G
 **Fig. 01 The GDID Tester Utility**
 
  GDID stored here - HKEY_CURRENT_USER, "SOFTWARE\Microsoft\IdentityCRL\ExtendedProperties", "lid"
+ 
  GDID contained within a set of sub keys under: Computer\HKEY_CURRENT_USER\SOFTWARE\Microsoft\IdentityCRL\Immersive\production\Token\
 
 **This key is used to identify your PC and what it accesses on the net.**
