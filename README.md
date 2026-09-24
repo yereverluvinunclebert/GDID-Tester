@@ -6,7 +6,8 @@ A small program in VB6/TwinBasic (nothing special) that allows you to view the G
 
 **Fig. 01 The GDID Tester Utility**
 
-HKEY_CURRENT_USER, "SOFTWARE\Microsoft\IdentityCRL\ExtendedProperties", "lid"
+ GDID stored here - HKEY_CURRENT_USER, "SOFTWARE\Microsoft\IdentityCRL\ExtendedProperties", "lid"
+ GDID contained within a set of sub keys under: Computer\HKEY_CURRENT_USER\SOFTWARE\Microsoft\IdentityCRL\Immersive\production\Token\
 
 **This key is used to identify your PC and what it accesses on the net.**
 
@@ -70,15 +71,6 @@ Later changes to come:
 
 * Complete variable changes to make it fully 64bit 
 * Use the API to test the GDID key instead of a timer.
-  
-* Phase II - WIP - deal with the GDID contained within the following set of keys:
-  Computer\HKEY_CURRENT_USER\SOFTWARE\Microsoft\IdentityCRL\Immersive\production\Token\
-  Loop through all the keys there eg.
-
-   {12E984BD-5803-4D78-9EFB-BED7B9212C26}
-
-  extract the DeviceId, match it with the known original GDID and see which match.
-  Change the DeviceID to match the new generated GDID
 
 * Phase III - deal with the GDID values within the following set of keys:
   Computer\HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\IdentityCRL\NegativeCache
