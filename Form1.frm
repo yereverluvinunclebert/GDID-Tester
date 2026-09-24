@@ -868,7 +868,11 @@ Private Sub Form_Unload(Cancel As Integer)
     
     Call writeLogFile("GDIDTester shutting down with GDID " & GDID, CStr(Now()))
     
-    ' End Do NOT comment this back in.
+' Deliberately force abnormal termination.
+' Diagnostic use only - do not use for normal shutdown.
+' Observed to cause GDID restoration by external Windows machinery.
+    
+    ' END  - Do NOT comment this back in. If the program is abnormally terminated, some part of Windows, yet to be determined reverts the LID value back to the original GDID.
 
     On Error GoTo 0
     Exit Sub
@@ -1127,16 +1131,28 @@ Private Sub modifyExtendedPropertiesLid(ByVal newGDID As String)
             Exit Sub
         End If
         GDID = readRegistryExtendedPropertiesLid
-        Exit Sub
+                                       
+        If gbStartupFlg = True Then
+            Call writeLogFile("GDID blanked at start up - ", CStr(nowValue))
+        Else
+            Call writeLogFile("GDID blanked ", CStr(nowValue))
+        End If
+        
+        Call writeCombo(nowValue)
+        
+        If gbStartupFlg = False Then
+            If chkAlertMsgBox.Value = 1 Then MsgBox "GDID has been auto-blanked"
+        End If
+        Call writeLogFile("Previous Value was - " & gsPreviousGDIDValue, CStr(nowValue))
+        'Call writeLogFile("ExtendedProperties lid blanked - ", CStr(nowValue))
     End If
     
     
     If chkAutomaticGeneration.Value = 1 Then
         
+            ' changes the registry entry LID to the new GDID
             Call regWriteExtendedPropertiesLid(True, newGDID)
-            
-            'newGDID = readRegistryExtendedPropertiesLid
-           
+                       
             If gbStartupFlg = True Then
                 Call writeLogFile("GDID auto-generated at start up - " & GDID, CStr(nowValue))
             Else
@@ -1150,16 +1166,6 @@ Private Sub modifyExtendedPropertiesLid(ByVal newGDID As String)
             End If
             Call writeLogFile("Previous Value was - " & gsPreviousGDIDValue, CStr(nowValue))
             Call writeLogFile("ExtendedProperties lid replaced with - " & newGDID, CStr(nowValue))
-
-'    Else
-'
-'        Call writeCombo(nowValue)
-'        Call writeLogFile("GDID Changed " & GDID, CStr(nowValue))
-'
-'        If chkAlertMsgBox.Value = 1 Then
-'            If gbStartupFlg = False Then MsgBox "GDID has been changed"
-'        End If
-'        Call writeLogFile("Changed from - " & gsPreviousGDIDValue)
     End If
 
     On Error GoTo 0
