@@ -60,13 +60,6 @@ traditional desktop applications, Dropbox for storage and a local login. I do no
 Once the GDID has been obfuscated, to prevent further modification of the GDID you could also run a tool such as ["Windows Firewall Notifier"](https://github.com/wokhan/WFN) that can be configured to prevent any unwanted changes to the GDID by preventing login.live.com access to your computer.
 
 For more information on the GDID tracking key visit this link : https://www.it-connect.tech/windows-gdid-impossible-to-delete-but-you-can-block-it/
-
-**Use this utility at your own risk**
-
-**It modifies values in your registry and so the results might be unexpected. Backup your registry, set a restore point prior to running the program. Backup your system hard drive, do whatever you have to do to make you feel secure that you can recover your system just in case.
-Look at the code to give you the happiness you need to run this program. Compile it yourself using VB6 or TwinBasic.** 
-
-
 Later changes to come:
 
 * Complete variable changes to make it fully 64bit 
@@ -80,3 +73,9 @@ Later changes to come:
   
   extract the first 16 chars of the key name, match it with the known original GDID and see which match.
   If found, change the keyname to match the new generated GDID
+
+
+**Use this utility at your own risk**
+
+**It modifies values in your registry and so the results might be unexpected. Backup your registry, set a restore point prior to running the program. Backup your system hard drive, do whatever you have to do to make you feel secure that you can recover your system just in case.
+Look at the code to give you the happiness you need to run this program. Compile it yourself using VB6 or TwinBasic.** 
