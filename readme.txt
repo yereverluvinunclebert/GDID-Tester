@@ -43,6 +43,7 @@ extract the first 16 chars of the key name, match it with the known original GDI
 0018C013A05744F3_S-1-5-21-732211230-4157827500-48361523-1001
 If found, change the keyname portion (16chars) to match the newly generated GDID
 
+Test whether the key is virtualised.  Not all keys in HKLM are virtualised.
 
 Stop the Connected Devices Platform User Service
 HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\
