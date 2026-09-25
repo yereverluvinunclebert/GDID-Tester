@@ -36,6 +36,8 @@ Tasks:
 
 o Use the RegNotifyChangeKeyValue API function to test the GDID key instead of a timer.
 
+o Add a simple non-blocking msgbox instead of the current VB6 version.
+
 
 Computer\HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\IdentityCRL\NegativeCache
 Loop through all the keys there eg.

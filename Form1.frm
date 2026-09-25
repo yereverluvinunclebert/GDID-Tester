@@ -396,6 +396,7 @@ Private Sub btnDismiss_Click()
     
     Call writeLogFile("GDIDTester manual shutdown requested ", Now())
     
+    Unload messageBox
     Unload Form1
 
     On Error GoTo 0
@@ -459,7 +460,7 @@ Private Sub writeLogs()
             Call writeCombo(nowValue)
             
             If gbStartupFlg = False Then
-                If chkAlertMsgBox.Value = 1 Then MsgBox "GDID has been auto-generated"
+                If chkAlertMsgBox.Value = 1 Then messageBox.gsMsgboxText = "GDID has been auto-generated"
             End If
             Call writeLogFile("Previous Value was - " & gsPreviousGDIDValue, CStr(nowValue))
             Call writeLogFile("ExtendedProperties lid replaced with - " & GDID, CStr(nowValue))
@@ -476,7 +477,7 @@ Private Sub writeLogs()
         Call writeCombo(nowValue)
         
         If gbStartupFlg = False Then
-            If chkAlertMsgBox.Value = 1 Then MsgBox "GDID has been auto-blanked"
+            If chkAlertMsgBox.Value = 1 Then messageBox.gsMsgboxText = "GDID has been auto-blanked"
         End If
         Call writeLogFile("Previous Value was - " & gsPreviousGDIDValue, CStr(nowValue))
         'Call writeLogFile("ExtendedProperties lid blanked - ", CStr(nowValue))
@@ -533,9 +534,11 @@ Private Sub btnReadRegistry_Click()
 
     GDID = readRegistryExtendedPropertiesLid
     If GDID = "" Then
-        MsgBox "No GDID found in the registry"
+        messageBox.gsMsgboxText = "No GDID found in the registry"
     Else
-        MsgBox "GDID found in the registry " & GDID
+        'MsgBox "GDID found in the registry " & GDID
+        messageBox.gsMsgboxText = "GDID found in the registry " & GDID
+        
     End If
     On Error GoTo 0
     Exit Sub
@@ -562,7 +565,7 @@ Private Sub btnRemoveRegValue_Click()
     GDID = readRegistryExtendedPropertiesLid
     
     If txtRegistryValue.Text = "" Then
-        MsgBox "No GDID found in the registry"
+        messageBox.gsMsgboxText = "No GDID found in the registry"
     Else
         
         bResult = regCreateKeyWriteStringClose(HKEY_CURRENT_USER, "SOFTWARE\Microsoft\IdentityCRL\ExtendedProperties", "lid", "")
@@ -1186,20 +1189,6 @@ Private Sub modifyExtendedPropertiesLid(ByVal newGDID As String)
             Exit Sub
         End If
         GDID = readRegistryExtendedPropertiesLid
-                                        
-'        If gbStartupFlg = True Then
-'            Call writeLogFile("GDID blanked at start up - ", CStr(nowValue))
-'        Else
-'            Call writeLogFile("GDID blanked ", CStr(nowValue))
-'        End If
-'
-'        Call writeCombo(nowValue)
-'
-'        If gbStartupFlg = False Then
-'            If chkAlertMsgBox.Value = 1 Then MsgBox "GDID has been auto-blanked"
-'        End If
-'        Call writeLogFile("Previous Value was - " & gsPreviousGDIDValue, CStr(nowValue))
-'        'Call writeLogFile("ExtendedProperties lid blanked - ", CStr(nowValue))
 
     End If
     
