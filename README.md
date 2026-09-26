@@ -1,6 +1,6 @@
 # GDID Tester utility
 
-A small program in VB6/TwinBasic (nothing special) that allows you to view the GDID value and remove it if you want to stymie a point of tracking by MicroSoft. The program is very slimline, it is 32bit but there is a twinproj file in the source that you can use to compile to 64bits using TwinBasic. Note that the TwinBasic version will lag behind the VB6 version as the VB6 code is the 'master'.
+A program in VB6/TwinBasic that allows you to view the GDID value and remove it if you want to stymie and prevent a point of web-tracking by MicroSoft. The program is very slimline, it is 32bit but there is a twinproj file in the source that you can use to compile to 64bits using TwinBasic. Note that the TwinBasic version will lag behind the VB6 version as the VB6 code is the 'master'.
 
 <img width="531" height="381" alt="image" src="https://github.com/user-attachments/assets/88f14ed3-7bbd-4df7-9e97-db98bec7155d" />
 
