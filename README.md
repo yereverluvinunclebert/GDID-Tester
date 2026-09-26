@@ -6,12 +6,15 @@ A program in VB6/TwinBasic that allows you to view the GDID value and remove it 
 
 **Fig. 01 The GDID Tester Utility**
 
+**This key is used to identify your PC and what it accesses on the net.**
+
 It currently removes the GDID as stored within these two key locations:
 
  **GDID stored here** - HKEY_CURRENT_USER, "SOFTWARE\Microsoft\IdentityCRL\ExtendedProperties", "lid"
- **GDID contained within a set of sub keys under:** Computer\HKEY_CURRENT_USER\SOFTWARE\Microsoft\IdentityCRL\Immersive\production\Token\
+ 
+ **GDID contained within a set of sub keys under** - Computer\HKEY_CURRENT_USER\SOFTWARE\Microsoft\IdentityCRL\Immersive\production\Token\
 
-**This key is used to identify your PC and what it accesses on the net.**
+**Program Usage**
 
 The first time you run the program, the original GDID key will be extracted and should be visible by default. The program stores the original GDID elsewhere, the first time it runs. It then allows you to view and manipulate the actual GDID as known to Windows in order to change or blank it - to avoid tracking.
 
