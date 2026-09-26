@@ -2,6 +2,10 @@ Done.
 =====
 
 Computer\HKEY_CURRENT_USER\SOFTWARE\Microsoft\IdentityCRL\Immersive\production\Token\  - loop through all the keys there Change the DeviceID.
+o Add a simple non-blocking msgbox instead of the current VB6 version.
+o remove END statement that causes a reversion of the 'watched' GDID registry value
+o separate the tmr logic to a separate routine called elsewhere
+o extract and replace the recently MS-modified sub keys that have the original GDID reverted
 
 Yet to do.
 ==========
@@ -36,18 +40,22 @@ Tasks:
 
 o Use the RegNotifyChangeKeyValue API function to test the GDID key instead of a timer.
 
-o Add a simple non-blocking msgbox instead of the current VB6 version.
 
 
-Computer\HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\IdentityCRL\NegativeCache
+
+o Computer\HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\IdentityCRL\NegativeCache
 Loop through all the keys there eg.
 extract the first 16 chars of the key name, match it with the known original GDID and see which match.
 0018C013A05744F3_S-1-5-21-732211230-4157827500-48361523-1001
 If found, change the keyname portion (16chars) to match the newly generated GDID
 
-Test whether the key is virtualised.  Not all keys in HKLM are virtualised.
+o Test whether the key is virtualised.  Not all keys in HKLM are virtualised.
 
 Stop the Connected Devices Platform User Service
 HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\
 Look for the service keys named CDPUserSvc and any corresponding split keys with alphanumeric suffixes such as CDPUserSvc_xxxx
 4 = Disabled
+
+o other programs, improve the registry reading/writing
+
+o in other programs remove the END!

@@ -620,6 +620,7 @@ Public Sub ReplaceMatchingDeviceIds(ByVal OriginalGDID As String, ByVal Temporar
 
     lIndex = 0
 
+    ' loop through all the sub keys until there are no more
     Do
         'Registry subkey names can be up to 255 characters.
         sSubKeyName = String$(256, vbNullChar)
@@ -670,7 +671,7 @@ Public Sub ReplaceMatchingDeviceIds(ByVal OriginalGDID As String, ByVal Temporar
                                     TemporaryGDID) Then
 
                             Debug.Print "    DeviceId replaced with: "; TemporaryGDID
-                            Call writeLogFile("DeviceId replaced with - " & TemporaryGDID & " in Immersive\production\Token", CStr(nowValue))
+                            Call writeLogFile("DeviceId " & OriginalGDID & " replaced with - " & TemporaryGDID & " in Immersive\production\Token", CStr(nowValue))
                         Else
                             Debug.Print "    ERROR writing DeviceId"
                         End If
@@ -678,7 +679,7 @@ Public Sub ReplaceMatchingDeviceIds(ByVal OriginalGDID As String, ByVal Temporar
                 Else
                     Debug.Print "    DeviceId not found/readable."
                 End If
-
+                ' now close each subkey that we encountered
                 RegCloseKey hSubKey
                 hSubKey = 0
             Else
@@ -692,6 +693,7 @@ Public Sub ReplaceMatchingDeviceIds(ByVal OriginalGDID As String, ByVal Temporar
         End If
     Loop
 
+    ' close the parent key
     RegCloseKey hTokenKey
 
     On Error GoTo 0
