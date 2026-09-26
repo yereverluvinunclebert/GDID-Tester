@@ -29,15 +29,28 @@ Begin VB.Form messageBox
       TabIndex        =   1
       Top             =   -90
       Width           =   5805
+      Begin VB.PictureBox picIcon 
+         BackColor       =   &H00FFFFFF&
+         BorderStyle     =   0  'None
+         Height          =   900
+         Left            =   270
+         Picture         =   "messageBox.frx":0000
+         ScaleHeight     =   900
+         ScaleWidth      =   900
+         TabIndex        =   3
+         Top             =   300
+         Width           =   900
+      End
       Begin VB.TextBox txtMessageBox 
          Alignment       =   2  'Center
          BorderStyle     =   0  'None
          Height          =   645
-         Left            =   150
+         Left            =   1260
+         MultiLine       =   -1  'True
          TabIndex        =   2
-         Text            =   "txtMessageBox"
+         Text            =   "messageBox.frx":19E6
          Top             =   540
-         Width           =   5745
+         Width           =   4545
       End
    End
 End

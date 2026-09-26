@@ -445,7 +445,7 @@ Private Sub writeLogs()
     On Error GoTo writeLogs_Error
 
     nowValue = Now()
-
+    
     If chkAutomaticGeneration.Value = 1 Then
                        
             If gbStartupFlg = True Then
@@ -479,6 +479,8 @@ Private Sub writeLogs()
         Call writeLogFile("Previous Value was - " & gsPreviousGDIDValue, CStr(nowValue))
         'Call writeLogFile("ExtendedProperties lid blanked - ", CStr(nowValue))
     End If
+    
+    Call writeLogFile(" ")
 
     On Error GoTo 0
     Exit Sub
