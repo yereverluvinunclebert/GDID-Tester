@@ -1,16 +1,20 @@
 # GDID Tester utility
 
-A small program in VB6/TwinBasic (nothing special) that allows you to view the GDID value and remove it if you want to stymie a point of tracking by MicroSoft. The program is very slimline, it is 32bit but there is a twinproj file in the source that you can use to compile to 64bits using TwinBasic. Note that the TwinBasic version will lag behind the VB6 version as the VB6 code is the 'master'.
+A program in VB6/TwinBasic that allows you to view the GDID value and remove it if you want to stymie and prevent a point of web-tracking by MicroSoft. The program is very slimline, it is 32bit but there is a twinproj file in the source that you can use to compile to 64bits using TwinBasic. Note that the TwinBasic version will lag behind the VB6 version as the VB6 code is the 'master'.
 
 <img width="531" height="381" alt="image" src="https://github.com/user-attachments/assets/88f14ed3-7bbd-4df7-9e97-db98bec7155d" />
 
 **Fig. 01 The GDID Tester Utility**
 
- GDID stored here - HKEY_CURRENT_USER, "SOFTWARE\Microsoft\IdentityCRL\ExtendedProperties", "lid"
- 
- GDID contained within a set of sub keys under: Computer\HKEY_CURRENT_USER\SOFTWARE\Microsoft\IdentityCRL\Immersive\production\Token\
-
 **This key is used to identify your PC and what it accesses on the net.**
+
+It currently removes the GDID as stored within these two key locations:
+
+ **GDID stored here** - HKEY_CURRENT_USER, "SOFTWARE\Microsoft\IdentityCRL\ExtendedProperties", "lid"
+ 
+ **GDID contained within a set of sub keys under** - Computer\HKEY_CURRENT_USER\SOFTWARE\Microsoft\IdentityCRL\Immersive\production\Token\
+
+**Program Usage**
 
 The first time you run the program, the original GDID key will be extracted and should be visible by default. The program stores the original GDID elsewhere, the first time it runs. It then allows you to view and manipulate the actual GDID as known to Windows in order to change or blank it - to avoid tracking.
 
